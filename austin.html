@@ -1,148 +1,1011 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Austin — Compbuild</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400..900&display=swap" rel="stylesheet">
-  <style>
-    :root{
-      --bg:#ffffff; --fg:#0a0a0a; --muted:#6b6b6b; --line: color-mix(in oklab, var(--fg) 12%, transparent);
-      --card: color-mix(in oklab, var(--fg) 5%, transparent); --max:1280px; --pad:clamp(16px,3vw,40px);
-      --accent:#1f8cff; --pink:#ff0675; --violet:#7c3cff;
-    }
-    [data-theme="dark"]{
-      --bg:#0a0a0a; --fg:#f5f5f5; --muted:#a4a4a4; --line: color-mix(in oklab, var(--fg) 16%, transparent);
-      --card: color-mix(in oklab, var(--fg) 6%, transparent);
-    }
-    *{box-sizing:border-box}
-    body{margin:0; font-family:"Manrope",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; background:var(--bg); color:var(--fg);}
-    a{color:inherit; text-decoration:none}
-    img{display:block; max-width:100%; height:auto}
-    .wrap{max-width:var(--max); margin-inline:auto; padding-inline:var(--pad)}
-    .stack{display:grid; gap:clamp(16px,2vw,28px)}
-    .nav{position:sticky; top:0; z-index:50; backdrop-filter:saturate(140%) blur(8px); background: color-mix(in oklab, var(--bg) 85%, transparent); border-bottom:1px solid var(--line)}
-    .nav-inner{display:flex; align-items:center; justify-content:space-between; padding:14px var(--pad)}
-    .brand{display:flex; align-items:center; gap:10px}
-    .brand img.logo{width:28px; height:28px}
-    .nav-links{display:flex; gap:20px; align-items:center}
-    .btn{display:inline-flex; align-items:center; gap:10px; border:1px solid var(--line); padding:10px 14px; border-radius:0}
-    .btn.arrow::after{content:"→"; margin-left:6px; transition:transform .2s ease}
-    .btn.arrow:hover::after{transform:translateX(3px)}
-    .hero{position:relative; min-height:78svh; display:grid; place-items:end start; border-bottom:1px solid var(--line); overflow:hidden}
-    .hero-media{position:absolute; inset:0;}
-    .hero-media img{width:100%; height:100%; object-fit:cover; filter:contrast(1.05) saturate(1.02); opacity:.6}
-    .hero-shade{position:absolute; inset:0; background:linear-gradient(180deg, transparent 35%, color-mix(in oklab, var(--bg) 75%, transparent))}
-    .hero-inner{position:relative; z-index:2; padding:clamp(36px,9vw,120px) var(--pad)}
-    .eyebrow{font-size:.9rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted)}
-    h1{font-size:clamp(36px,6vw,76px); line-height:1.02; margin:8px 0 12px}
-    .lead{color:var(--muted); font-size:clamp(16px,1.4vw,18px)}
-    section{padding: clamp(60px, 10vw, 140px) 0; border-bottom:1px solid var(--line)}
-    h2{font-size:clamp(28px,4.5vw,44px); margin:0 0 12px}
-    .facts{display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:14px}
-    .fact{border:1px solid var(--line); padding:16px; background:var(--card)}
-    .fact b{font-size:clamp(22px,3.2vw,28px)}
-    @media (min-width:900px){ .facts{grid-template-columns: repeat(4, minmax(0,1fr));} }
-    .reveal{opacity:0; translate:0 10px; transition:opacity .6s ease, translate .6s ease}
-    .reveal.in{opacity:1; translate:0 0}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Austin — Compbuild</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  html{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  body{margin:0}
+  ::selection{background:#bf5700;color:#fff}
+  @keyframes auRise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes auFlow{0%{background-position:0% 50%}100%{background-position:300% 50%}}
+  @keyframes auMarqL{from{transform:translate3d(0,0,0)}to{transform:translate3d(-50%,0,0)}}
+  @keyframes auMarqR{from{transform:translate3d(-50%,0,0)}to{transform:translate3d(0,0,0)}}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
 </head>
 <body>
-  <header class="nav">
-    <div class="nav-inner wrap">
-      <a href="/website/" class="brand" aria-label="Compbuild home">
-        <img class="logo" src="https://static.wixstatic.com/media/5f17e4_8d64bc05672c4787bcc7a5b3220e4303~mv2.png/v1/fill/w_53,h_53,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/5f17e4_8d64bc05672c4787bcc7a5b3220e4303~mv2.png" alt="Compbuild" />
-      </a>
-      <nav class="nav-links">
-        <a href="/website/#about">About</a>
-        <a href="/website/#projects">Projects</a>
-        <a href="/website/#pack">Textures</a>
-        <button id="themeToggle" class="btn arrow" aria-label="Toggle theme">Dark/Light</button>
-      </nav>
-    </div>
-  </header>
+<div data-au="AUSTIN" style="font-family:Manrope,system-ui,sans-serif;background:var(--bg,#ffffff);color:var(--fg,#0b0b0b);transition:color .6s ease;overflow-x:clip">
 
-  <section id="top" class="hero">
-    <div class="hero-media" aria-hidden="true">
-      <img src="https://media.discordapp.net/attachments/796149186307293244/1360775468277698682/2025-04-12_19.35.03.png?ex=6899e3a9&is=68989229&hm=3c4bc537d312ea762ca6742986777dc5280d99470cc2bf3a8e016175036bcdf9&=&format=webp&quality=lossless&width=1521&height=856" alt="Austin 1.5:1 project hero" />
-      <div class="hero-shade"></div>
+  <!-- hook 'em popup -->
+  <div data-hookem style="position:fixed;right:20px;bottom:20px;z-index:130;display:flex;align-items:flex-start;gap:13px;padding:15px 16px;border-radius:13px;background:var(--fg,#0b0b0b);color:var(--bg,#fff);box-shadow:0 18px 44px rgba(0,0,0,.28);opacity:0;transform:translateY(22px) scale(.96);pointer-events:none;transition:opacity .5s ease,transform .55s cubic-bezier(.2,.8,.2,1);max-width:310px">
+    <span data-hookem-emoji style="font-size:30px;line-height:1;display:block">🤘</span>
+    <div style="flex:1">
+      <div style="font-weight:700;font-size:15px;background:linear-gradient(115deg,#ff9a3d,#ffb066);-webkit-background-clip:text;background-clip:text;color:transparent">Hook ’em!</div>
+      <div style="font-size:12px;opacity:.72;line-height:1.45;margin-top:3px">The hand sign of the Texas Longhorns — the University of Texas at Austin’s teams. Locals throw it up everywhere.</div>
     </div>
-    <div class="hero-inner wrap">
-      <span class="eyebrow">1.5:1 Scale • Compbuild Textures</span>
-      <h1 class="reveal">Austin — Modern Texas at ambitious scale</h1>
-      <p class="lead reveal">Our Austin project recreates the capital of Texas at <b>1.5:1 scale</b>, leveraging <b>Compbuild Textures</b> for realism and detail — from the skyline and freeway stack interchanges to hill country neighborhoods and lakeside corridors.</p>
-      <div class="reveal" style="display:flex; gap:10px; flex-wrap:wrap; align-items:center">
-        <a class="btn arrow" href="https://discord.gg/compbuildredux" target="_blank" rel="noopener">Join Discord</a>
-        <span class="btn" title="Copy server IP" data-copy="PLAY.COMPBUILDREDUX.NET">IP: PLAY.COMPBUILDREDUX.NET</span>
+    <button data-hookem-close aria-label="Dismiss" style="cursor:pointer;border:none;background:transparent;color:inherit;opacity:.5;font-size:15px;line-height:1;padding:2px;align-self:flex-start">✕</button>
+  </div>
+
+  <div style="position:fixed;top:0;left:0;right:0;height:2px;z-index:140;background:transparent"><div data-prog style="height:100%;width:100%;transform:scaleX(0);transform-origin:0 50%;background:linear-gradient(90deg,#bf5700,#e87500,#ffb066)"></div></div>
+
+  <!-- nav -->
+  <nav data-nav style="position:fixed;top:0;left:0;right:0;z-index:110;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:16px clamp(20px,4vw,56px);background:color-mix(in srgb,var(--bg,#fff) 78%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid transparent;transition:background-color .6s ease,border-color .35s ease">
+    <a href="index.html" data-hover style="display:flex;align-items:center;gap:11px;text-decoration:none;color:var(--fg,#0b0b0b)">
+      <img data-logo src="assets/logo.png" alt="Compbuild" style="height:22px;width:auto;display:block"/>
+      <span style="font-weight:700;font-size:16px;letter-spacing:-.01em">Compbuild</span>
+    </a>
+    <div style="display:flex;align-items:center;gap:clamp(16px,2.4vw,30px)">
+      <span style="font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;opacity:.5;display:flex;align-items:center;gap:9px"><span style="width:6px;height:6px;border-radius:50%;background:#bf5700"></span>Austin — Recreation</span>
+      <a href="index.html#worlds" style="text-decoration:none;color:var(--fg,#0b0b0b);font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;opacity:.6">All projects</a>
+      <button data-action="toggleTheme" aria-label="Toggle theme" style="cursor:pointer;width:34px;height:34px;display:flex;align-items:center;justify-content:center;border:1px solid var(--line,rgba(11,11,11,.16));border-radius:999px;background:transparent;color:var(--fg,#0b0b0b);transition:border-color .3s ease">
+        <span style="width:13px;height:13px;border-radius:999px;border:1.5px solid var(--fg,#0b0b0b);background:linear-gradient(90deg,var(--fg,#0b0b0b) 0 50%,transparent 50% 100%)"></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- hero -->
+  <section style="position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:space-between;padding:clamp(98px,14vh,152px) clamp(20px,4vw,56px) clamp(28px,4vh,50px);overflow:hidden">
+    <div aria-hidden="true" style="position:absolute;top:-10%;right:-6%;width:60vw;height:60vw;max-width:780px;max-height:780px;border-radius:50%;background:radial-gradient(circle,rgba(232,117,0,.42) 0%,rgba(255,176,102,.2) 40%,transparent 68%);filter:blur(20px);pointer-events:none;z-index:0"></div>
+    <div aria-hidden="true" style="position:absolute;bottom:-22%;left:-12%;width:52vw;height:52vw;max-width:680px;max-height:680px;border-radius:50%;background:radial-gradient(circle,rgba(191,87,0,.32) 0%,transparent 66%);filter:blur(22px);pointer-events:none;z-index:0"></div>
+    <div style="position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;padding-bottom:clamp(22px,3.5vh,38px);border-bottom:1px solid var(--line,rgba(11,11,11,.14))">
+      <div data-parallax="0.04" style="font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;background:linear-gradient(115deg,#bf5700,#e87500,#ffb066);-webkit-background-clip:text;background-clip:text;color:transparent;animation:auRise .9s .1s both">Project 03 — Recreation</div>
+      <div data-parallax="0.08" style="font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;opacity:.55;text-align:center;animation:auRise .9s .2s both">Austin, Texas, USA</div>
+      <div data-parallax="0.12" style="font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;opacity:.55;text-align:right;animation:auRise .9s .3s both">1.5 : 1 scale — Compbuild Textures</div>
+    </div>
+    <div style="position:relative;z-index:2;max-width:24ch;margin:clamp(40px,8vh,96px) 0">
+      <p data-parallax="0.05" style="margin:0;font-weight:700;font-size:clamp(28px,4.8vw,68px);line-height:1.02;letter-spacing:-.035em;animation:auRise 1s .35s both">The Live Music Capital, rebuilt block by block.</p>
+    </div>
+    <div style="position:relative;z-index:2;display:flex;align-items:flex-end;justify-content:space-between;gap:24px">
+      <h1 data-hero-mark style="margin:0;font-weight:700;font-size:clamp(80px,23vw,400px);line-height:.86;letter-spacing:-.05em;will-change:transform,opacity;padding-bottom:.06em">Austin</h1>
+      <span data-parallax="0.2" style="font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;opacity:.5;white-space:nowrap;padding-bottom:10px;animation:auRise .9s .5s both">Scroll ↓</span>
+    </div>
+  </section>
+
+  <!-- hero image -->
+  <section style="padding:0 clamp(20px,4vw,56px) clamp(40px,7vh,90px)">
+    <div data-parallax-img style="position:relative;height:clamp(280px,64vh,640px);overflow:hidden;border:1px solid var(--line,rgba(11,11,11,.14));transition:border-color .6s ease">
+      <div data-pimg style="position:absolute;inset:-12% 0;background:#111;will-change:transform"><img src="assets/world-austin.webp" alt="Downtown Austin — Compbuild recreation, street level" style="width:100%;height:100%;object-fit:cover;display:block"/></div>
+      <span style="position:absolute;left:18px;bottom:16px;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#fff;z-index:2;text-shadow:0 1px 4px rgba(0,0,0,.6)">Downtown Austin — street level</span>
+      <span style="position:absolute;right:18px;top:16px;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#fff;z-index:2;text-shadow:0 1px 4px rgba(0,0,0,.6)">Fig. 01</span>
+    </div>
+  </section>
+
+  <!-- reading reveal intro -->
+  <section data-read-wrap style="position:relative;height:240vh;border-top:1px solid var(--line,rgba(11,11,11,.14));transition:border-color .6s ease">
+    <div style="position:sticky;top:0;height:100vh;display:flex;align-items:center;padding:0 clamp(20px,6vw,110px)">
+      <div style="max-width:1150px">
+        <div style="font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;background:linear-gradient(115deg,#bf5700,#e87500,#ffb066);-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:clamp(24px,4vh,46px)">01 — The real Austin</div>
+        <p data-read style="margin:0;font-weight:500;font-size:clamp(24px,3.9vw,54px);line-height:1.18;letter-spacing:-.02em">In the warm heart of Texas — in the southern United States — sits Austin: a riverside city of live music on every corner, a fast-rising tech scene, and a laid-back, do-your-own-thing spirit the locals sum up in three words — Keep Austin Weird.</p>
       </div>
     </div>
   </section>
 
-  <section id="about-austin">
-    <div class="wrap stack">
-      <h2 class="reveal">What is Austin?</h2>
-      <p class="lead reveal">Austin is the capital city of Texas, located in the heart of the state along the Colorado River. Known for its vibrant live music scene, tech industry growth, and proximity to the Texas Hill Country, Austin blends southern charm with a modern, innovative spirit. It hosts major events like South by Southwest (SXSW) and the Austin City Limits (ACL) music festival, and is home to the University of Texas at Austin. The city is a hub for creativity, culture, and outdoor activities — making it one of the fastest‑growing metropolitan areas in the United States.</p>
-    </div>
-  </section>
-
-  <section id="irl">
-    <div class="wrap stack">
-      <h2 class="reveal">Austin, Texas — quick facts</h2>
-      <div class="facts reveal">
-        <div class="fact"><div>City population (ACS 2023)</div><b>~979,700</b></div>
-        <div class="fact"><div>Metro population (ACS 2023)</div><b>~2.47M</b></div>
-        <div class="fact"><div>Founded / Capital since</div><b>1839</b></div>
-        <div class="fact"><div>City area (land)</div><b>~320 sq mi</b></div>
-        <div class="fact"><div>Metro GDP (2023, BEA)</div><b>$248B</b></div>
-        <div class="fact"><div>Elevation (city center)</div><b>~489 ft</b></div>
-        <div class="fact"><div>Signature sights</div><b>Texas Capitol, UT Tower, Congress Ave Bridge</b></div>
-        <div class="fact"><div>Known for</div><b>Tech, music (SXSW/ACL), Hill Country</b></div>
+  <!-- global zoom to austin -->
+  <section data-zoomwrap style="position:relative;height:560vh;border-top:1px solid var(--line,rgba(11,11,11,.14));transition:border-color .6s ease">
+    <div style="position:sticky;top:0;height:100vh;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end">
+      <canvas data-globe style="position:absolute;inset:0;width:100%;height:100%;display:block"></canvas>
+      <canvas data-citymap style="position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0"></canvas>
+      <div data-zoomstage style="display:none">
+        <svg viewBox="0 0 1000 500" preserveAspectRatio="xMidYMid meet" style="position:absolute;inset:0;width:100%;height:100%;display:block">
+          <g data-zoomworld="1">
+        <g stroke="var(--fg,#0b0b0b)" stroke-width="0.5" opacity="0.14">
+            <line x1="100" y1="0" x2="100" y2="500"></line><line x1="200" y1="0" x2="200" y2="500"></line><line x1="300" y1="0" x2="300" y2="500"></line><line x1="400" y1="0" x2="400" y2="500"></line><line x1="500" y1="0" x2="500" y2="500"></line><line x1="600" y1="0" x2="600" y2="500"></line><line x1="700" y1="0" x2="700" y2="500"></line><line x1="800" y1="0" x2="800" y2="500"></line><line x1="900" y1="0" x2="900" y2="500"></line>
+            <line x1="0" y1="100" x2="1000" y2="100"></line><line x1="0" y1="200" x2="1000" y2="200"></line><line x1="0" y1="250" x2="1000" y2="250"></line><line x1="0" y1="300" x2="1000" y2="300"></line><line x1="0" y1="400" x2="1000" y2="400"></line>
+          </g>
+          <g fill="none" stroke="var(--fg,#0b0b0b)" stroke-width="1.1" opacity="0.5" stroke-linejoin="round" stroke-linecap="round">
+            <path d="M70,96 L120,86 L120,120 L88,124 Z"></path>
+            <path d="M120,80 L180,62 L300,66 L330,96 L322,120 L286,128 L266,150 L250,176 L238,196 L228,178 L240,150 L210,150 L150,140 L120,120 Z"></path>
+            <path d="M360,52 L410,52 L404,96 L368,92 Z"></path>
+            <path d="M300,208 L340,206 L356,250 L342,300 L320,360 L306,392 L298,348 L288,290 L284,250 Z"></path>
+            <path d="M470,96 L540,90 L560,104 L548,130 L512,128 L486,140 L472,120 Z"></path>
+            <path d="M486,150 L600,150 L612,196 L588,250 L556,326 L520,330 L506,260 L490,210 L478,178 Z"></path>
+            <path d="M566,80 L760,64 L900,80 L960,120 L900,150 L820,150 L760,170 L700,150 L640,150 L600,128 L566,110 Z"></path>
+            <path d="M700,150 L730,150 L724,196 L706,182 Z"></path>
+            <path d="M812,300 L900,292 L928,320 L900,352 L840,356 L812,332 Z"></path>
+          </g>
+          <circle cx="228" cy="166" r="3.4" fill="#e87500"></circle>
+          </g>
+          <g data-zoomtexas="1" opacity="0">
+            <path d="M214,150 L226,150 L226,158 L242,158 L246,164 L250,176 L242,186 L234,184 L230,192 L222,186 L210,178 L200,172 L206,166 L214,166 Z" fill="none" stroke="var(--fg,#0b0b0b)" stroke-width="1.3" stroke-linejoin="round"></path>
+            <circle cx="228" cy="166" r="1.5" fill="#e87500"></circle>
+          </g>
+        </svg>
       </div>
-      <p class="muted">Sources: U.S. Census/ACS 2023, BEA 2023, Texas State Preservation Board.</p>
-    </div>
-  </section>
-
-  <section id="cta">
-    <div class="wrap stack">
-      <h2 class="reveal">Want to help build Austin?</h2>
-      <p class="lead reveal">Hop in our Discord for updates and build coordination. Bring references, we’ll bring the textures.</p>
-      <div style="display:flex; gap:10px; flex-wrap:wrap">
-        <a class="btn arrow" href="https://discord.gg/compbuildredux" target="_blank" rel="noopener">Join Discord</a>
-        <span class="btn" data-copy="PLAY.COMPBUILDREDUX.NET" title="Copy server IP">IP: PLAY.COMPBUILDREDUX.NET</span>
+      <div data-zoomcross style="display:none">
+        <span style="position:absolute;left:50%;top:50%;width:54px;height:54px;border:1.5px solid #e87500;border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 26px rgba(232,117,0,.55)"></span>
+        <span style="position:absolute;left:50%;top:50%;width:9px;height:9px;border-radius:50%;background:#e87500;transform:translate(-50%,-50%);box-shadow:0 0 12px rgba(232,117,0,.9)"></span>
+        <span style="position:absolute;left:50%;top:50%;width:1px;height:30px;background:#e87500;opacity:.45;transform:translate(-50%,-90px)"></span>
+      </div>
+      <div style="position:absolute;top:clamp(86px,12vh,118px);left:clamp(20px,4vw,56px);right:clamp(20px,4vw,56px);display:flex;align-items:baseline;justify-content:space-between;gap:16px;pointer-events:none">
+        <h2 style="margin:0;font-weight:600;font-size:clamp(22px,3vw,40px);letter-spacing:-.03em">Where in the world?</h2>
+        <span data-zoomcoord style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;opacity:.55;font-variant-numeric:tabular-nums">Earth</span>
+      </div>
+      <div style="position:relative;padding:0 clamp(20px,4vw,56px) clamp(40px,7vh,76px);pointer-events:none">
+        <div data-zoomlabel style="font-weight:700;font-size:clamp(38px,8vw,120px);line-height:.9;letter-spacing:-.04em;background:linear-gradient(115deg,#bf5700,#e87500,#ffb066);-webkit-background-clip:text;background-clip:text;color:transparent">Earth</div>
+        <p style="margin:14px 0 0;max-width:40ch;font-size:clamp(14px,1.3vw,17px);line-height:1.5;opacity:.6">Scroll to fly from the whole planet down to the streets of downtown Austin — and watch the skyline rise.</p>
       </div>
     </div>
   </section>
 
-  <footer class="wrap">
-    <div class="stack muted">©2025 COMPBUILD REDUX — Not an official Minecraft service. Not affiliated with Mojang or Microsoft.</div>
+  <!-- sticky landmark stage -->
+  <section data-stagewrap style="position:relative;border-top:1px solid var(--line,rgba(11,11,11,.14));transition:border-color .6s ease">
+    <div style="display:grid;grid-template-columns:1fr 1fr">
+      <div style="position:sticky;top:0;height:100vh;display:flex;flex-direction:column;justify-content:center;padding:clamp(40px,8vh,90px) clamp(20px,3vw,52px);border-right:1px solid var(--line,rgba(11,11,11,.14));transition:border-color .6s ease">
+        <div style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;opacity:.45;margin-bottom:18px">Now viewing</div>
+        <div data-stage-num style="font-weight:700;font-size:clamp(70px,11vw,150px);letter-spacing:-.05em;line-height:.8;background:linear-gradient(115deg,#bf5700,#e87500,#ffb066);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:auFlow 5s linear infinite">01</div>
+        <h2 data-stage-name style="margin:18px 0 0;font-weight:600;font-size:clamp(28px,3.6vw,52px);letter-spacing:-.03em;line-height:1;transition:opacity .4s ease">Texas State Capitol</h2>
+        <p data-stage-fact style="margin:16px 0 0;max-width:40ch;font-size:clamp(15px,1.4vw,18px);line-height:1.55;opacity:.66;transition:opacity .4s ease">Completed in 1888 and taller than the U.S. Capitol, its dome anchors the north end of Congress Avenue.</p>
+      </div>
+      <div style="padding:0 clamp(20px,4vw,64px)">
+        <div data-stage-step style="min-height:100vh;display:flex;flex-direction:column;justify-content:center;gap:16px;padding:clamp(40px,8vh,90px) 0">
+          <span style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;background:linear-gradient(115deg,#bf5700,#e87500);-webkit-background-clip:text;background-clip:text;color:transparent">Civic core</span>
+          <h3 style="margin:0;font-weight:600;font-size:clamp(26px,3.2vw,46px);letter-spacing:-.02em;line-height:1.04">The Capitol &amp; Congress Avenue</h3>
+          <p style="margin:0;max-width:44ch;font-size:clamp(15px,1.4vw,18px);line-height:1.55;opacity:.66">Every U.S. state has a capitol building; Texas built one of the grandest. Austin’s pink-granite dome — finished in 1888 — even stands taller than the national Capitol in Washington, and crowns Congress Avenue, the city’s monumental main street.</p>
+        </div>
+        <div data-stage-step style="min-height:100vh;display:flex;flex-direction:column;justify-content:center;gap:16px;padding:clamp(40px,8vh,90px) 0;border-top:1px solid var(--line,rgba(11,11,11,.14))">
+          <span style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;background:linear-gradient(115deg,#bf5700,#e87500);-webkit-background-clip:text;background-clip:text;color:transparent">Skyline</span>
+          <h3 style="margin:0;font-weight:600;font-size:clamp(26px,3.2vw,46px);letter-spacing:-.02em;line-height:1.04">Downtown &amp; the towers</h3>
+          <p style="margin:0;max-width:44ch;font-size:clamp(15px,1.4vw,18px);line-height:1.55;opacity:.66">A skyline of glass and stone that has shot upward over the last decade — including some of the tallest towers anywhere in the southern United States, recreated here block by block.</p>
+        </div>
+        <div data-stage-step style="min-height:100vh;display:flex;flex-direction:column;justify-content:center;gap:16px;padding:clamp(40px,8vh,90px) 0;border-top:1px solid var(--line,rgba(11,11,11,.14))">
+          <span style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;background:linear-gradient(115deg,#bf5700,#e87500);-webkit-background-clip:text;background-clip:text;color:transparent">River &amp; green</span>
+          <h3 style="margin:0;font-weight:600;font-size:clamp(26px,3.2vw,46px);letter-spacing:-.02em;line-height:1.04">Lady Bird Lake &amp; Zilker</h3>
+          <p style="margin:0;max-width:44ch;font-size:clamp(15px,1.4vw,18px);line-height:1.55;opacity:.66">Right through downtown, the Colorado River widens into Lady Bird Lake — ringed by a leafy hike-and-bike trail, the green expanse of Zilker Park, and Barton Springs, a natural spring-fed pool that stays cool all year.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- kinetic gazetteer -->
+  <section data-velwrap style="padding:clamp(54px,9vh,120px) 0 clamp(40px,7vh,90px);border-top:1px solid var(--line,rgba(11,11,11,.14));transition:border-color .6s ease;overflow:hidden">
+    <div style="padding:0 clamp(20px,4vw,56px);margin-bottom:clamp(30px,5vh,58px);display:flex;align-items:baseline;justify-content:space-between;gap:20px;flex-wrap:wrap">
+      <h2 data-split data-grad style="margin:0;font-weight:700;font-size:clamp(32px,5vw,72px);letter-spacing:-.035em;line-height:.96">The neighborhoods</h2>
+      <span style="font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;opacity:.5;max-width:34ch;text-align:right">Real districts, recreated block by block</span>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:clamp(8px,1.4vh,16px)">
+      <div style="overflow:hidden;white-space:nowrap"><div data-velrow="1" style="display:inline-flex;width:max-content;animation:auMarqL 38s linear infinite;font-weight:600;font-size:clamp(28px,4.4vw,64px);letter-spacing:-.02em;will-change:transform"><span style="padding-right:.5em">Downtown&nbsp;&nbsp;·&nbsp;&nbsp;<span style="background:linear-gradient(115deg,#bf5700,#ffb066);-webkit-background-clip:text;background-clip:text;color:transparent">Sixth Street</span>&nbsp;&nbsp;·&nbsp;&nbsp;Rainey Street&nbsp;&nbsp;·&nbsp;&nbsp;South Congress&nbsp;&nbsp;·&nbsp;&nbsp;The Drag&nbsp;&nbsp;·&nbsp;&nbsp;</span><span style="padding-right:.5em" aria-hidden="true">Downtown&nbsp;&nbsp;·&nbsp;&nbsp;<span style="background:linear-gradient(115deg,#bf5700,#ffb066);-webkit-background-clip:text;background-clip:text;color:transparent">Sixth Street</span>&nbsp;&nbsp;·&nbsp;&nbsp;Rainey Street&nbsp;&nbsp;·&nbsp;&nbsp;South Congress&nbsp;&nbsp;·&nbsp;&nbsp;The Drag&nbsp;&nbsp;·&nbsp;&nbsp;</span></div></div>
+      <div style="overflow:hidden;white-space:nowrap"><div data-velrow="-1" style="display:inline-flex;width:max-content;animation:auMarqR 44s linear infinite;font-weight:600;font-size:clamp(28px,4.4vw,64px);letter-spacing:-.02em;opacity:.55;will-change:transform"><span style="padding-right:.5em">East Austin&nbsp;&nbsp;·&nbsp;&nbsp;Hyde Park&nbsp;&nbsp;·&nbsp;&nbsp;Travis Heights&nbsp;&nbsp;·&nbsp;&nbsp;West Campus&nbsp;&nbsp;·&nbsp;&nbsp;Clarksville&nbsp;&nbsp;·&nbsp;&nbsp;Mueller&nbsp;&nbsp;·&nbsp;&nbsp;</span><span style="padding-right:.5em" aria-hidden="true">East Austin&nbsp;&nbsp;·&nbsp;&nbsp;Hyde Park&nbsp;&nbsp;·&nbsp;&nbsp;Travis Heights&nbsp;&nbsp;·&nbsp;&nbsp;West Campus&nbsp;&nbsp;·&nbsp;&nbsp;Clarksville&nbsp;&nbsp;·&nbsp;&nbsp;Mueller&nbsp;&nbsp;·&nbsp;&nbsp;</span></div></div>
+      <div style="overflow:hidden;white-space:nowrap"><div data-velrow="1" style="display:inline-flex;width:max-content;animation:auMarqL 50s linear infinite;font-weight:600;font-size:clamp(28px,4.4vw,64px);letter-spacing:-.02em;will-change:transform"><span style="padding-right:.5em">Zilker&nbsp;&nbsp;·&nbsp;&nbsp;Barton Springs&nbsp;&nbsp;·&nbsp;&nbsp;<span style="background:linear-gradient(115deg,#bf5700,#ffb066);-webkit-background-clip:text;background-clip:text;color:transparent">Lady Bird Lake</span>&nbsp;&nbsp;·&nbsp;&nbsp;The Domain&nbsp;&nbsp;·&nbsp;&nbsp;UT Campus&nbsp;&nbsp;·&nbsp;&nbsp;</span><span style="padding-right:.5em" aria-hidden="true">Zilker&nbsp;&nbsp;·&nbsp;&nbsp;Barton Springs&nbsp;&nbsp;·&nbsp;&nbsp;<span style="background:linear-gradient(115deg,#bf5700,#ffb066);-webkit-background-clip:text;background-clip:text;color:transparent">Lady Bird Lake</span>&nbsp;&nbsp;·&nbsp;&nbsp;The Domain&nbsp;&nbsp;·&nbsp;&nbsp;UT Campus&nbsp;&nbsp;·&nbsp;&nbsp;</span></div></div>
+    </div>
+  </section>
+
+  <!-- facts -->
+  <section data-about style="position:relative;height:360vh;border-top:1px solid var(--line,rgba(11,11,11,.14));transition:border-color .6s ease">
+    <div style="position:sticky;top:0;height:100vh;overflow:hidden;display:flex;flex-direction:column;justify-content:center;padding:0 clamp(20px,5vw,90px)">
+      <div data-about-ghost style="position:absolute;right:clamp(-8px,2vw,48px);bottom:clamp(-40px,-5vh,-12px);font-weight:800;font-size:clamp(220px,42vw,560px);line-height:.66;letter-spacing:-.05em;opacity:.06;pointer-events:none;color:var(--fg,#0b0b0b)">01</div>
+      <div style="position:absolute;top:clamp(86px,12vh,118px);left:clamp(20px,5vw,90px);right:clamp(20px,5vw,90px);display:flex;align-items:baseline;justify-content:space-between;gap:16px">
+        <h2 style="margin:0;font-weight:600;font-size:clamp(22px,3vw,40px);letter-spacing:-.03em">About the city</h2>
+        <span data-about-count style="font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;opacity:.55;font-variant-numeric:tabular-nums">01 / 06</span>
+      </div>
+      <div style="position:relative;max-width:1040px">
+        <div data-about-tag style="font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;margin-bottom:clamp(18px,3vh,32px);background:linear-gradient(115deg,#bf5700,#e87500,#ffb066);-webkit-background-clip:text;background-clip:text;color:transparent;transition:opacity .35s ease">Capital city</div>
+        <div data-about-title style="font-weight:700;font-size:clamp(32px,6vw,90px);line-height:1.0;letter-spacing:-.035em;transition:opacity .35s ease">The capital of Texas.</div>
+        <p data-about-body style="margin:clamp(20px,3vh,34px) 0 0;max-width:50ch;font-size:clamp(16px,1.7vw,23px);line-height:1.5;opacity:.66;transition:opacity .35s ease">Texas is one of the 50 United States — and Austin is its capital, the city where the whole state is governed, a role it has held since 1839.</p>
+      </div>
+      <div data-about-dots style="position:absolute;left:clamp(20px,5vw,90px);bottom:clamp(40px,7vh,64px);display:flex;gap:9px"></div>
+    </div>
+  </section>
+
+  <!-- build specs (Compbuild) -->
+  <section style="background:var(--fg,#0b0b0b);color:var(--bg,#fff);padding:clamp(60px,12vh,150px) clamp(20px,4vw,56px);transition:background-color .6s ease,color .6s ease">
+    <div style="font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;background:linear-gradient(115deg,#ff7a1a,#ffb066);-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:clamp(26px,5vh,52px)">02 — How it's built</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:clamp(30px,5vw,80px);align-items:end">
+      <h2 style="margin:0;font-weight:600;font-size:clamp(36px,6vw,100px);line-height:.92;letter-spacing:-.04em">Built at<br>1.5 : 1 scale.</h2>
+      <div style="max-width:46ch">
+        <p style="margin:0 0 26px;font-size:clamp(16px,1.5vw,20px);line-height:1.55;opacity:.85">Austin is rebuilt at one-and-a-half Minecraft blocks to the meter — big enough to capture real proportion, ornament, and street rhythm, while still being buildable by hand. Every surface uses Compbuild’s own free, architecture-first <strong style="font-weight:700">Compbuild Textures</strong> pack.</p>
+        <div style="display:flex;flex-direction:column;border-top:1px solid rgba(255,255,255,.2)">
+          <div style="display:flex;justify-content:space-between;padding:15px 0;border-bottom:1px solid rgba(255,255,255,.2)"><span style="font-weight:600">Build scale</span><span style="background:linear-gradient(115deg,#ff9a3d,#ffb066);-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:700">1.5 : 1</span></div>
+          <div style="display:flex;justify-content:space-between;padding:15px 0;border-bottom:1px solid rgba(255,255,255,.2)"><span style="font-weight:600">Texture pack</span><span style="opacity:.75">Compbuild Textures</span></div>
+          <div style="display:flex;justify-content:space-between;padding:15px 0;border-bottom:1px solid rgba(255,255,255,.2)"><span style="font-weight:600">Method</span><span style="opacity:.75">Reference-driven recreation</span></div>
+          <div style="display:flex;justify-content:space-between;padding:15px 0;border-bottom:1px solid rgba(255,255,255,.2)"><span style="font-weight:600">Subject</span><span style="opacity:.75">Austin, Texas</span></div>
+        </div>
+        <p style="margin:20px 0 0;font-size:13px;opacity:.55;line-height:1.5">Austin is Compbuild's learning ground for architectural fundamentals — scale, proportion, and discipline.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- history horizontal scrub -->
+  <section data-htimeline style="position:relative;height:360vh;border-top:1px solid var(--line,rgba(11,11,11,.14));transition:border-color .6s ease">
+    <div style="position:sticky;top:0;height:100vh;overflow:hidden;display:flex;flex-direction:column;justify-content:center">
+      <div style="position:absolute;top:0;left:0;right:0;display:flex;align-items:baseline;justify-content:space-between;padding:clamp(86px,12vh,118px) clamp(20px,4vw,56px) 0">
+        <h2 style="margin:0;font-weight:700;font-size:clamp(32px,5vw,72px);letter-spacing:-.035em;line-height:.96">Austin through time</h2>
+        <span data-hcount style="font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;opacity:.5">01 / 04</span>
+      </div>
+      <div data-htrack style="display:flex;align-items:stretch;gap:clamp(18px,2vw,32px);padding:0 clamp(20px,4vw,56px);will-change:transform">
+        <article style="flex:none;width:clamp(300px,74vw,540px);border-top:2px solid #bf5700;padding-top:22px;display:flex;flex-direction:column">
+          <span style="font-weight:600;font-size:clamp(54px,8vw,120px);letter-spacing:-.04em;line-height:.9;background:linear-gradient(115deg,#bf5700,#e87500,#ffb066);-webkit-background-clip:text;background-clip:text;color:transparent">1839</span>
+          <span style="font-size:13px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;opacity:.5;margin:18px 0 12px">Founded as the capital</span>
+          <p style="margin:0;max-width:44ch;font-size:15px;line-height:1.55;opacity:.64">The riverside village of Waterloo is chosen as the new capital of the Republic of Texas and renamed for Stephen F. Austin.</p>
+        </article>
+        <article style="flex:none;width:clamp(300px,74vw,540px);border-top:2px solid #bf5700;padding-top:22px;display:flex;flex-direction:column">
+          <span style="font-weight:600;font-size:clamp(54px,8vw,120px);letter-spacing:-.04em;line-height:.9;background:linear-gradient(115deg,#bf5700,#e87500,#ffb066);-webkit-background-clip:text;background-clip:text;color:transparent">1888</span>
+          <span style="font-size:13px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;opacity:.5;margin:18px 0 12px">The Capitol &amp; the University</span>
+          <p style="margin:0;max-width:44ch;font-size:15px;line-height:1.55;opacity:.64">The pink-granite State Capitol is completed; UT Austin, opened in 1883, begins to define the city's north side.</p>
+        </article>
+        <article style="flex:none;width:clamp(300px,74vw,540px);border-top:2px solid #bf5700;padding-top:22px;display:flex;flex-direction:column">
+          <span style="font-weight:600;font-size:clamp(54px,8vw,120px);letter-spacing:-.04em;line-height:.9;background:linear-gradient(115deg,#bf5700,#e87500,#ffb066);-webkit-background-clip:text;background-clip:text;color:transparent">1990s</span>
+          <span style="font-size:13px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;opacity:.5;margin:18px 0 12px">Silicon Hills rises</span>
+          <p style="margin:0;max-width:44ch;font-size:15px;line-height:1.55;opacity:.64">A booming tech sector turns Austin into one of America's fastest-growing cities — and a magnet for music and film.</p>
+        </article>
+        <article style="flex:none;width:clamp(300px,74vw,540px);border-top:2px solid #bf5700;padding-top:22px;display:flex;flex-direction:column">
+          <span style="font-weight:600;font-size:clamp(54px,8vw,120px);letter-spacing:-.04em;line-height:.9;background:linear-gradient(115deg,#bf5700,#e87500,#ffb066);-webkit-background-clip:text;background-clip:text;color:transparent">Today</span>
+          <span style="font-size:13px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;opacity:.5;margin:18px 0 12px">A supertall skyline</span>
+          <p style="margin:0;max-width:44ch;font-size:15px;line-height:1.55;opacity:.64">Downtown is reshaped by a new generation of towers — the skyline Compbuild recreates block-by-block at 1.5× scale.</p>
+        </article>
+        <div style="flex:none;width:clamp(20px,6vw,120px)"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- stats -->
+  <section style="padding:clamp(54px,9vh,120px) clamp(20px,4vw,56px);border-top:1px solid var(--line,rgba(11,11,11,.14));transition:border-color .6s ease">
+    <div style="display:flex;flex-wrap:wrap;gap:clamp(28px,5vw,80px)">
+      <div data-statcol style="flex:1;min-width:150px"><div style="font-weight:800;font-size:clamp(40px,6vw,84px);letter-spacing:-.03em;line-height:.95"><span data-count="1839">0</span></div><div style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;opacity:.5;margin-top:14px;padding-top:14px;border-top:1px solid var(--line,rgba(11,11,11,.14))">Year founded</div></div>
+      <div data-statcol style="flex:1;min-width:150px"><div style="font-weight:800;font-size:clamp(40px,6vw,84px);letter-spacing:-.03em;line-height:.95"><span data-count="1.5" data-suffix="×" data-dec="1" style="background:linear-gradient(115deg,#bf5700,#e87500,#ffb066);-webkit-background-clip:text;background-clip:text;color:transparent">0</span></div><div style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;opacity:.5;margin-top:14px;padding-top:14px;border-top:1px solid var(--line,rgba(11,11,11,.14))">Build scale</div></div>
+      <div data-statcol style="flex:1;min-width:150px"><div style="font-weight:800;font-size:clamp(40px,6vw,84px);letter-spacing:-.03em;line-height:.95"><span data-count="1" data-suffix="M">0</span></div><div style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;opacity:.5;margin-top:14px;padding-top:14px;border-top:1px solid var(--line,rgba(11,11,11,.14))">City population</div></div>
+      <div data-statcol style="flex:1;min-width:150px"><div style="font-weight:800;font-size:clamp(40px,6vw,84px);letter-spacing:-.03em;line-height:.95">#4</div><div style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;opacity:.5;margin-top:14px;padding-top:14px;border-top:1px solid var(--line,rgba(11,11,11,.14))">Largest in Texas</div></div>
+    </div>
+  </section>
+
+  <!-- footer -->
+  <footer style="background:var(--fg,#0b0b0b);color:var(--bg,#fff);padding:clamp(64px,12vh,150px) clamp(20px,4vw,56px) clamp(32px,5vh,52px);transition:background-color .6s ease,color .6s ease;overflow:hidden">
+    <div style="font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;opacity:.55;margin-bottom:26px">Next</div>
+    <a href="index.html#worlds" style="display:block;text-decoration:none;margin:0 0 clamp(34px,6vh,64px);font-weight:700;font-size:clamp(48px,11vw,200px);line-height:.82;letter-spacing:-.05em;background:linear-gradient(115deg,#bf5700,#e87500,#ffb066,#e87500,#bf5700);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:auFlow 6s linear infinite">Back to projects →</a>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;padding-top:24px;border-top:1px solid rgba(255,255,255,.18);font-size:12px;font-weight:500;opacity:.55">
+      <span>© 2026 Compbuild Studios — Austin</span>
+      <span style="letter-spacing:.08em;text-transform:uppercase">Recreation · 1.5 : 1</span>
+    </div>
   </footer>
+</div>
+<script>
+// Lightweight standalone runtime: the design's component logic is pure DOM code,
+// so we keep it verbatim and provide a minimal base class + bootstrap in place of
+// the original Design Component (React) runtime.
+class DCLogic { constructor(props){ this.props = props || {}; } }
 
-  <script>
-    const root = document.documentElement;
-    const toggle = document.getElementById('themeToggle');
-    const saved = localStorage.getItem('theme');
-    if(saved){ root.setAttribute('data-theme', saved); }
-    toggle?.addEventListener('click', () => {
-      const cur = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-      root.setAttribute('data-theme', cur);
-      localStorage.setItem('theme', cur);
-    });
-    const io = new IntersectionObserver((entries)=>{
-      entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} })
-    }, {threshold: 0.12});
-    document.querySelectorAll('.reveal').forEach((el,i)=>{
-      el.style.transitionDelay = (i*40)+'ms';
-      io.observe(el);
-    });
-    function copyText(str){
-      if(!str) return;
-      navigator.clipboard.writeText(str).catch(()=>{
-        const ta = document.createElement('textarea'); ta.value = str; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
-      });
+class Component extends DCLogic {
+  constructor(props){
+    super(props);
+    this.mode = String(props.startMode || 'Light').toLowerCase() === 'dark' ? 'dark' : 'light';
+    this.htotal = 4;
+  }
+  themes(){
+    return {
+      light: {'--bg':'#ffffff','--fg':'#0b0b0b','--muted':'#8a8a8a','--line':'rgba(11,11,11,0.14)'},
+      dark:  {'--bg':'#0a0a0a','--fg':'#fafafa','--muted':'#8a8a8a','--line':'rgba(255,255,255,0.15)'}
+    };
+  }
+  applyTheme(mode){
+    if(!this.root) return;
+    const t = this.themes()[mode];
+    Object.keys(t).forEach(k => this.root.style.setProperty(k, t[k]));
+    const logo = this.root.querySelector('[data-logo]');
+    if(logo) logo.style.filter = mode === 'dark' ? 'invert(1)' : 'none';
+    this.fgRGB = mode === 'dark' ? [245,245,245] : [13,13,13];
+    this.globeFill = mode === 'dark' ? 'rgba(255,255,255,0.025)' : 'rgba(13,13,13,0.02)';
+    if(this.globeReady) this.drawGlobe();
+    if(this.c3Scene) this.updateCity3DTheme();
+  }
+  fgRGBA(a){ const c=this.fgRGB||[13,13,13]; return 'rgba('+c[0]+','+c[1]+','+c[2]+','+a+')'; }
+  initGlobe(){
+    this.canvas = this.root.querySelector('[data-globe]');
+    if(!this.canvas) return;
+    this.gctx = this.canvas.getContext('2d');
+    const tryInit = ()=>{
+      if(!window.d3 || !window.topojson || !window.d3.geoOrthographic){ this._gi = setTimeout(tryInit, 150); return; }
+      fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json')
+        .then(r=>r.json())
+        .then(topo=>{
+          this.land = window.topojson.feature(topo, topo.objects.countries);
+          this.borders = window.topojson.mesh(topo, topo.objects.countries, (a,b)=>a!==b);
+          this.graticule = window.d3.geoGraticule10();
+          this.projection = window.d3.geoOrthographic().clipAngle(90).precision(0.5);
+          this.globeReady = true;
+          this.sizeGlobe();
+          this.drawGlobe();
+        })
+        .catch(()=>{ this.globeReady = false; if(this.canvas) this.canvas.style.display='none'; });
+    };
+    tryInit();
+  }
+  sizeGlobe(){
+    if(!this.canvas) return;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const w = this.canvas.clientWidth || this.canvas.offsetWidth;
+    const h = this.canvas.clientHeight || this.canvas.offsetHeight;
+    if(!w || !h) return;
+    this.canvas.width = Math.round(w*dpr); this.canvas.height = Math.round(h*dpr);
+    this.gctx.setTransform(dpr,0,0,dpr,0,0);
+    this.gW = w; this.gH = h; this.fitScale = Math.min(w,h)*0.46;
+    if(this.sizeCity3D) this.sizeCity3D();
+  }
+  drawGlobe(){
+    if(!this.globeReady || !this.projection || !this.gW) return;
+    const ctx=this.gctx, w=this.gW, h=this.gH;
+    const p=this._zoomP||0;
+    // globe completes its zoom by p=0.58; city takes over after
+    const gp=this.clamp(p/0.58,0,1); const ease=gp*gp*(3-2*gp);
+    const globeAlpha=1-(p<=0.5?0:this.clamp((p-0.5)/0.12,0,1));
+    const cityAlpha=this.clamp((p-0.52)/0.12,0,1);
+    const cp=this.clamp((p-0.58)/0.42,0,1);
+    ctx.clearRect(0,0,w,h);
+    if(globeAlpha>0.001){
+      ctx.save(); ctx.globalAlpha=globeAlpha;
+      const targetLon=97.74, targetPhi=-30.27, startLon=targetLon-54, startPhi=-4;
+      const idle=(1-ease)*Math.sin(performance.now()/2600)*22;
+      const lam=startLon+(targetLon-startLon)*ease+idle;
+      const phi=startPhi+(targetPhi-startPhi)*ease;
+      this.projection.rotate([lam,phi,0]);
+      this.projection.scale(this.fitScale*(1+ease*4.6)).translate([w/2,h/2]);
+      const path=window.d3.geoPath(this.projection, ctx);
+      ctx.beginPath(); path({type:'Sphere'}); ctx.fillStyle=this.globeFill||'rgba(0,0,0,.02)'; ctx.fill();
+      ctx.beginPath(); path(this.graticule); ctx.strokeStyle=this.fgRGBA(0.10); ctx.lineWidth=0.6; ctx.stroke();
+      ctx.beginPath(); path(this.land); ctx.fillStyle=this.fgRGBA(0.06); ctx.fill();
+      ctx.beginPath(); path(this.borders); ctx.strokeStyle=this.fgRGBA(0.42); ctx.lineWidth=0.6; ctx.stroke();
+      ctx.beginPath(); path(this.land); ctx.strokeStyle=this.fgRGBA(0.78); ctx.lineWidth=0.9; ctx.stroke();
+      ctx.beginPath(); path({type:'Sphere'}); ctx.strokeStyle=this.fgRGBA(0.22); ctx.lineWidth=1; ctx.stroke();
+      const rot=this.projection.rotate(), center=[-rot[0],-rot[1]];
+      // reference cities — fade in at the continental view, fade out as we close on Austin
+      const refA=this.clamp((ease-0.12)/0.18,0,1)*this.clamp(1-(ease-0.66)/0.2,0,1);
+      if(refA>0.02){
+        const cities=[['New York',-74.0,40.7],['Los Angeles',-118.2,34.0],['Chicago',-87.6,41.9],['Miami',-80.2,25.8],['Houston',-95.4,29.8],['Dallas',-96.8,32.8],['Mexico City',-99.1,19.4],['London',-0.13,51.5],['Paris',2.35,48.85],['Tokyo',139.7,35.7],['Toronto',-79.4,43.7],['São Paulo',-46.6,-23.5]];
+        ctx.font='600 11px ui-monospace, Menlo, monospace'; ctx.textAlign='left';
+        cities.forEach(c=>{ if(window.d3.geoDistance([c[1],c[2]],center) < Math.PI/2){ const p2=this.projection([c[1],c[2]]); if(p2){ ctx.beginPath(); ctx.arc(p2[0],p2[1],2.6,0,2*Math.PI); ctx.fillStyle=this.fgRGBA(0.5*refA); ctx.fill(); ctx.fillStyle=this.fgRGBA(0.62*refA); ctx.fillText(c[0], p2[0]+6, p2[1]+3.6); } } });
+      }
+      const lon=-97.74, lat=30.27;
+      if(window.d3.geoDistance([lon,lat],center) < Math.PI/2){
+        const pt=this.projection([lon,lat]);
+        if(pt){ const pulse=(Math.sin(performance.now()/520)+1)/2; const rr=4+ease*4;
+          ctx.beginPath(); ctx.arc(pt[0],pt[1], rr+5+pulse*8,0,2*Math.PI); ctx.strokeStyle='rgba(232,117,0,'+(0.5-pulse*0.32)+')'; ctx.lineWidth=1.5; ctx.stroke();
+          ctx.beginPath(); ctx.arc(pt[0],pt[1], rr,0,2*Math.PI); ctx.fillStyle='#e87500'; ctx.fill();
+          ctx.beginPath(); ctx.arc(pt[0],pt[1], rr,0,2*Math.PI); ctx.strokeStyle='#fff'; ctx.lineWidth=1.2; ctx.stroke();
+        }
+      }
+      ctx.restore();
     }
-    document.querySelectorAll('[data-copy]').forEach(btn=> btn.addEventListener('click', ()=> copyText(btn.getAttribute('data-copy'))));
-  </script>
+    this._cp = cp;
+  }
+  riverPts(){
+    // Lady Bird Lake centerline (ground coords): hooks down from NW, bends east along downtown's south edge
+    return [
+      {x:-5.8,y:-3.4,w:0.40},{x:-5.1,y:-1.5,w:0.44},{x:-4.6,y:0.1,w:0.50},
+      {x:-4.0,y:1.2,w:0.58},{x:-3.3,y:1.95,w:0.66},{x:-1.9,y:2.34,w:0.74},
+      {x:-0.1,y:2.54,w:0.80},{x:1.9,y:2.55,w:0.82},{x:3.9,y:2.72,w:0.82},{x:5.9,y:2.98,w:0.84}
+    ];
+  }
+  riverYAt(gx){
+    const p=this.riverPts(); let a=p[4];
+    for(let i=4;i<p.length-1;i++){ if(gx>=p[i].x && gx<=p[i+1].x){ const t=(gx-p[i].x)/(p[i+1].x-p[i].x); return {y:p[i].y+(p[i+1].y-p[i].y)*t, w:p[i].w+(p[i+1].w-p[i].w)*t}; } }
+    if(gx<p[4].x) return {y:p[4].y,w:p[4].w}; const l=p[p.length-1]; return {y:l.y,w:l.w};
+  }
+  bankY(gx){ const r=this.riverYAt(gx); return r.y - r.w - 0.28; }
+  buildCity(){
+    if(this._city) return this._city;
+    const rng=(s)=>{ const x=Math.sin(s*91.7+s*0.013)*43758.5453; return x-Math.floor(x); };
+    // Real downtown Austin towers — ft = architectural height, x = left→right as viewed north from Lady Bird Lake, depth = 0 front .. 1 back
+    const B=[
+      {name:'The Independent', ft:690,  x:0.07, depth:0.16, type:'jenga',   accent:true, delay:0.10},
+      {name:'360',             ft:581,  x:0.155,depth:0.52, type:'glass',                 delay:0.16},
+      {name:'Google',          ft:430,  x:0.215,depth:0.04, type:'sail',                  delay:0.06},
+      {name:'The Republic',    ft:710,  x:0.30, depth:0.60, type:'flat',                  delay:0.20},
+      {name:'6 X Guadalupe',   ft:874,  x:0.40, depth:0.68, type:'flat',                  delay:0.05},
+      {name:'The Austonian',   ft:683,  x:0.495,depth:0.28, type:'taper',                 delay:0.12},
+      {name:'Frost Bank',      ft:515,  x:0.58, depth:0.18, type:'owl',                   delay:0.14},
+      {name:'Capitol',         ft:311,  x:0.66, depth:0.96, type:'dome',                  delay:0.24},
+      {name:'Fairmont',        ft:590,  x:0.725,depth:0.48, type:'flat',                  delay:0.18},
+      {name:'Indeed',          ft:592,  x:0.80, depth:0.58, type:'flat',                  delay:0.16},
+      {name:'Waterline',       ft:1025, x:0.90, depth:0.34, type:'stepped',               delay:0.04},
+      {name:'Rainey',          ft:410,  x:0.965,depth:0.12, type:'flat',                  delay:0.10}
+    ];
+    for(let i=0;i<30;i++){ const r=rng(i*3.1); B.push({ft:120+r*250, x:0.02+rng(i*7.3+1)*0.96, depth:0.18+rng(i*2.7)*0.78, type:'flat', filler:true, delay:rng(i*5.1)*0.3}); }
+    this._city=B; return B;
+  }
+  drawCity(cp){
+    const ctx=this.gctx, w=this.gW, h=this.gH;
+    const ease=cp*cp*(3-2*cp);
+    const fg=this.fgRGBA.bind(this);
+    const horizon=h*0.665;
+    const ftPx=(h*0.47)/1025;
+    const shore=(xx)=>horizon + Math.sin(xx/w*Math.PI*1.6+0.5)*h*0.012;
+    // dusk glow behind the skyline
+    const gx=ctx.createRadialGradient(w*0.5,horizon,h*0.04,w*0.5,horizon,w*0.55);
+    gx.addColorStop(0,'rgba(232,117,0,'+(0.10*ease)+')'); gx.addColorStop(1,'rgba(232,117,0,0)');
+    ctx.fillStyle=gx; ctx.fillRect(0,0,w,horizon+2);
+    // Lady Bird Lake — gently curved shoreline
+    ctx.beginPath(); ctx.moveTo(0,shore(0));
+    for(let xx=0;xx<=w;xx+=w/40){ ctx.lineTo(xx,shore(xx)); }
+    ctx.lineTo(w,h); ctx.lineTo(0,h); ctx.closePath();
+    ctx.fillStyle='rgba(86,150,200,'+(0.11*ease)+')'; ctx.fill();
+    ctx.beginPath(); ctx.moveTo(0,shore(0));
+    for(let xx=0;xx<=w;xx+=w/40){ ctx.lineTo(xx,shore(xx)); }
+    ctx.strokeStyle='rgba(86,150,200,'+(0.4*ease)+')'; ctx.lineWidth=1; ctx.stroke();
+    // perspective downtown street grid at the base of the towers (receding north)
+    ctx.save(); ctx.globalAlpha=ease*0.5; ctx.strokeStyle=fg(0.12); ctx.lineWidth=0.6;
+    const vpx=w*0.52, vpy=horizon-h*0.05;
+    for(let k=-6;k<=6;k++){ const bx=w*0.5+k*w*0.072; ctx.beginPath(); ctx.moveTo(bx,horizon); ctx.lineTo(vpx+(bx-vpx)*0.18, vpy); ctx.stroke(); }
+    for(let r=1;r<=3;r++){ const yy=horizon-(horizon-vpy)*(r/4); ctx.beginPath(); ctx.moveTo(w*0.5-(horizon-yy)/(horizon-vpy)*w*0.46, yy); ctx.lineTo(w*0.5+(horizon-yy)/(horizon-vpy)*w*0.46, yy); ctx.stroke(); }
+    ctx.restore();
+    const place=(b)=>{ const s=1-b.depth*0.34; const baseY=horizon-b.depth*(h*0.045); const px=w*(0.11+b.x*0.78); const bw=w*((b.filler?0.0085:0.016))*s; const fullH=b.ft*ftPx*s; const He=this.clamp((ease-b.delay)/(1-b.delay),0,1); const H=fullH*He*He*(3-2*He); return {s,baseY,px,bw,H}; };
+    const box=(px,baseY,bw,H,c,win)=>{ if(H<0.3) return; const dx=bw*0.55, dy=bw*0.34;
+      ctx.beginPath(); ctx.moveTo(px-bw,baseY-H); ctx.lineTo(px+bw,baseY-H); ctx.lineTo(px+bw+dx,baseY-H-dy); ctx.lineTo(px-bw+dx,baseY-H-dy); ctx.closePath(); ctx.fillStyle=c.top; ctx.fill(); ctx.strokeStyle=c.edge; ctx.lineWidth=0.6; ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(px+bw,baseY); ctx.lineTo(px+bw+dx,baseY-dy); ctx.lineTo(px+bw+dx,baseY-dy-H); ctx.lineTo(px+bw,baseY-H); ctx.closePath(); ctx.fillStyle=c.side; ctx.fill(); ctx.stroke();
+      ctx.beginPath(); ctx.rect(px-bw,baseY-H,bw*2,H); ctx.fillStyle=c.front; ctx.fill(); ctx.stroke();
+      if(win && bw>3){ ctx.save(); ctx.beginPath(); ctx.rect(px-bw,baseY-H,bw*2,H); ctx.clip(); ctx.strokeStyle=c.win; ctx.lineWidth=0.5; const step=Math.max(3,bw*0.55); for(let yy=baseY-step; yy>baseY-H; yy-=step){ ctx.beginPath(); ctx.moveTo(px-bw,yy); ctx.lineTo(px+bw,yy); ctx.stroke(); } for(let vx=px-bw+bw*0.66; vx<px+bw; vx+=bw*0.66){ ctx.beginPath(); ctx.moveTo(vx,baseY); ctx.lineTo(vx,baseY-H); ctx.stroke(); } ctx.restore(); }
+    };
+    const refl=(px,baseY,bw,H,c)=>{ if(baseY<horizon-1||H<1) return; const g=ctx.createLinearGradient(0,baseY,0,baseY+H*0.6); g.addColorStop(0,c.front); g.addColorStop(1,'rgba(0,0,0,0)'); ctx.save(); ctx.globalAlpha=0.15*ease; ctx.fillStyle=g; ctx.fillRect(px-bw,baseY,bw*2,H*0.6); ctx.restore(); };
+    const palInk={ front:fg(0.17), side:fg(0.27), top:fg(0.07), edge:fg(0.45), win:fg(0.30) };
+    const palAcc={ front:'rgba(191,87,0,0.94)', side:'rgba(150,64,0,0.96)', top:'rgba(255,176,102,0.96)', edge:'rgba(120,50,0,0.6)', win:'rgba(255,200,150,0.5)' };
+    const list=this.buildCity().slice().sort((a,b)=> b.depth-a.depth);
+    for(const b of list){
+      const p=place(b); if(p.H<0.3) continue; const c=b.accent?palAcc:palInk; const t=b.type||'flat'; const win=!b.filler;
+      if(t==='jenga'){
+        const segs=4, segH=p.H/segs; for(let k=0;k<segs;k++){ const ox=[0,-0.55,0.5,-0.2][k]*p.bw; const oz=[0,0.3,-0.2,0.25][k]; box(p.px+ox, p.baseY-k*segH+oz*segH*0.0, p.bw, segH*1.04, c, win); }
+      } else if(t==='taper'){
+        // Austonian — wide base, set-back upper shaft, slim spire
+        const h1=p.H*0.6, h2=p.H; box(p.px,p.baseY,p.bw,h1,c,win); box(p.px,p.baseY-h1,p.bw*0.66,h2-h1,c,win); const a=p.baseY-p.H; ctx.beginPath(); ctx.moveTo(p.px,a); ctx.lineTo(p.px,a-p.H*0.22); ctx.strokeStyle=c.edge; ctx.lineWidth=1.1; ctx.stroke();
+      } else if(t==='sail'){
+        const aw=p.bw*0.9, lean=p.bw*1.1; const bx=p.px;
+        ctx.beginPath(); ctx.moveTo(bx-aw, p.baseY); ctx.lineTo(bx+aw, p.baseY); ctx.quadraticCurveTo(bx+aw+lean*0.4, p.baseY-p.H*0.6, bx+lean, p.baseY-p.H); ctx.quadraticCurveTo(bx-aw*0.2, p.baseY-p.H*0.9, bx-aw, p.baseY); ctx.closePath(); ctx.fillStyle=c.front; ctx.fill(); ctx.strokeStyle=c.edge; ctx.lineWidth=0.7; ctx.stroke();
+      } else {
+        box(p.px,p.baseY,p.bw,p.H,c, win);
+        const a=p.baseY-p.H;
+        if(t==='antenna'){ ctx.beginPath(); ctx.moveTo(p.px,a); ctx.lineTo(p.px,a-p.H*0.18); ctx.strokeStyle=c.edge; ctx.lineWidth=1.1; ctx.stroke(); }
+        else if(t==='glass'){ ctx.beginPath(); ctx.moveTo(p.px-p.bw*0.6,a); ctx.quadraticCurveTo(p.px, a-p.H*0.16, p.px+p.bw*0.6, a); ctx.closePath(); ctx.fillStyle=c.top; ctx.fill(); ctx.strokeStyle=c.edge; ctx.stroke(); }
+        else if(t==='stepped'){ box(p.px+p.bw*0.18,a,p.bw*0.74,p.H*0.15,c); box(p.px-p.bw*0.1,a-p.H*0.15,p.bw*0.5,p.H*0.12,c); ctx.beginPath(); ctx.moveTo(p.px,a-p.H*0.27); ctx.lineTo(p.px,a-p.H*0.38); ctx.strokeStyle=c.edge; ctx.lineWidth=1; ctx.stroke(); }
+        else if(t==='owl'){ [-1,-0.42,0.42,1].forEach(o=>{ const xx=p.px+o*p.bw*0.9; ctx.beginPath(); ctx.moveTo(xx,a); ctx.lineTo(xx,a-p.H*0.2); ctx.strokeStyle=c.edge; ctx.lineWidth=1.2; ctx.stroke(); }); ctx.beginPath(); ctx.moveTo(p.px-p.bw*0.6,a-p.H*0.06); ctx.lineTo(p.px,a-p.H*0.26); ctx.lineTo(p.px+p.bw*0.6,a-p.H*0.06); ctx.strokeStyle=c.edge; ctx.lineWidth=1; ctx.stroke(); }
+        else if(t==='dome'){ ctx.beginPath(); ctx.arc(p.px,a,p.bw*0.9,Math.PI,0); ctx.fillStyle=c.front; ctx.fill(); ctx.strokeStyle=c.edge; ctx.stroke(); ctx.beginPath(); ctx.moveTo(p.px,a-p.bw*0.9); ctx.lineTo(p.px,a-p.bw*1.5); ctx.stroke(); }
+      }
+      refl(p.px,p.baseY,p.bw,p.H,c);
+    }
+    // Congress Avenue Bridge — arched span across Lady Bird Lake (foreground road)
+    const bridge=(by,scale,alpha)=>{ ctx.save(); ctx.globalAlpha=alpha*ease; ctx.strokeStyle=fg(0.5); ctx.fillStyle=fg(0.14); ctx.lineWidth=1*scale;
+      const arches=9, span=w/arches, rise=h*0.022*scale;
+      ctx.beginPath(); ctx.moveTo(0,by); ctx.lineTo(w,by); ctx.lineTo(w,by+h*0.012*scale); ctx.lineTo(0,by+h*0.012*scale); ctx.closePath(); ctx.fill(); ctx.stroke();
+      for(let k=0;k<arches;k++){ const ax=k*span; ctx.beginPath(); ctx.moveTo(ax,by+h*0.012*scale); ctx.quadraticCurveTo(ax+span/2, by+h*0.012*scale+rise, ax+span, by+h*0.012*scale); ctx.stroke(); }
+      // deck railing posts
+      for(let xx=0;xx<=w;xx+=span/3){ ctx.beginPath(); ctx.moveTo(xx,by); ctx.lineTo(xx,by-h*0.008*scale); ctx.stroke(); }
+      ctx.restore();
+    };
+    bridge(horizon+h*0.085, 0.85, 0.55);
+    bridge(horizon+h*0.20, 1.15, 0.8);
+    if(ease>0.55){
+      ctx.save(); ctx.globalAlpha=this.clamp((ease-0.55)/0.35,0,1); ctx.textAlign='center';
+      ctx.font='600 '+Math.round(h*0.013)+'px Manrope, sans-serif';
+      const lab=(name)=>{ const b=this.buildCity().find(x=>x.name===name); if(!b) return; const p=place(b); const ly=p.baseY-p.H-(b.type==='antenna'||b.type==='taper'?p.H*0.24:p.bw*0.6)-h*0.012; ctx.fillStyle=b.accent?'rgba(191,87,0,1)':fg(0.62); ctx.fillText(name.toUpperCase(), p.px, ly); };
+      ['Waterline','6 X Guadalupe','The Independent','Frost Bank'].forEach(lab);
+      ctx.restore();
+    }
+  }
+  c3Colors(){
+    return { face:0xf3f2ec, edge:0x33332f, ground:0x9c9a91, street:0x8d8b82, water:0x4a6675,
+             fog:0xc4d0d8, bridge:0xc4c4bd, tree:0x76907a, skyTop:0x86a8c6, skyBot:0xe2e9ec };
+  }
+  initCity3D(){
+    if(!window.THREE){ this._c3t=(this._c3t||0)+1; if(this._c3t<60){ this._c3i=setTimeout(()=>this.initCity3D(),150); } return; }
+    const THREE=window.THREE;
+    const cv=document.querySelector('[data-city3d]');
+    if(!cv){ this._c3i=setTimeout(()=>this.initCity3D(),150); return; }
+    if(window.__AUSTIN3D && window.__AUSTIN3D.c3Renderer && window.__AUSTIN3D.c3El===cv && document.body.contains(cv)){ this.startCityLoop(); return; }
+    this.c3El=cv;
+    const renderer=new THREE.WebGLRenderer({canvas:this.c3El, antialias:true, alpha:true, preserveDrawingBuffer:true});
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
+    renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+    renderer.outputEncoding=THREE.sRGBEncoding;
+    renderer.toneMapping=THREE.ACESFilmicToneMapping; renderer.toneMappingExposure=1.06;
+    this.c3Renderer=renderer;
+    const scene=new THREE.Scene();
+    const col=this.c3Colors();
+    scene.fog=new THREE.Fog(col.fog, 760, 2000);
+    this.c3Scene=scene;
+    { const bgc=document.createElement('canvas'); bgc.width=8; bgc.height=256; const bx=bgc.getContext('2d');
+      const hx=(n)=>'#'+('000000'+n.toString(16)).slice(-6);
+      const g=bx.createLinearGradient(0,0,0,256); g.addColorStop(0,hx(col.skyTop)); g.addColorStop(1,hx(col.skyBot));
+      bx.fillStyle=g; bx.fillRect(0,0,8,256); const tex=new THREE.CanvasTexture(bgc); scene.background=tex; this.c3Bg=tex; }
+    this.c3Cam=new THREE.PerspectiveCamera(44,1,0.5,4000);
+    const hemi=new THREE.HemisphereLight(0xcfd8e0, 0x55554f, 0.34); scene.add(hemi); this.c3Hemi=hemi;
+    const amb=new THREE.AmbientLight(0xffffff,0.08); scene.add(amb);
+    const fill=new THREE.DirectionalLight(0xbcc6d0,0.18); fill.position.set(180,90,120); scene.add(fill);
+    const dir=new THREE.DirectionalLight(0xfff2e2,2.05); dir.position.set(-185,165,135); dir.castShadow=true;
+    dir.shadow.mapSize.set(2048,2048); const sc=300;
+    dir.shadow.camera.left=-sc;dir.shadow.camera.right=sc;dir.shadow.camera.top=sc;dir.shadow.camera.bottom=-sc;dir.shadow.camera.far=900; dir.shadow.bias=-0.0006;
+    scene.add(dir);
+    try{ this.buildCity3D(); }catch(err){ console.log('C3INIT '+(err&&err.stack||err)); }
+    this.sizeCity3D();
+    window.__AUSTIN3D=this;
+    this.startCityLoop();
+  }
+  rebindCity3D(cv){
+    const THREE=window.THREE;
+    try{ if(this.c3Renderer) this.c3Renderer.dispose(); }catch(e){}
+    const renderer=new THREE.WebGLRenderer({canvas:cv, antialias:true, alpha:true, preserveDrawingBuffer:true});
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
+    renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+    renderer.outputEncoding=THREE.sRGBEncoding;
+    renderer.toneMapping=THREE.ACESFilmicToneMapping; renderer.toneMappingExposure=1.06;
+    this.c3Renderer=renderer; this.c3El=cv; this.sizeCity3D();
+  }
+  startCityLoop(){
+    if(window.__austinLoop) return; window.__austinLoop=true;
+    const tick=()=>{ this.cityRenderNow(); requestAnimationFrame(tick); };
+    tick();
+  }
+  cityRenderNow(){
+    try{
+      const cl=(v,a,b)=>Math.max(a,Math.min(b,v));
+      const inst=window.__AUSTIN3D;
+      const cv=document.querySelector('[data-city3d]');
+      const zw=document.querySelector('[data-zoomwrap]');
+      if(inst && cv && zw && inst.c3Renderer && inst.c3Scene && inst.c3Cam){
+        if(inst.c3Renderer.domElement!==cv) inst.rebindCity3D(cv);
+        const r=zw.getBoundingClientRect(); const total=zw.offsetHeight-window.innerHeight;
+        const p=cl((-r.top)/(total||1),0,1);
+        const vis=r.bottom>-120 && r.top<window.innerHeight+120;
+        cv.style.opacity = vis ? String(cl((p-0.52)/0.12,0,1)) : '0';
+        const cp=cl((p-0.58)/0.42,0,1);
+        if(vis && cp>0.001) inst.renderCity3D(cp);
+      }
+    }catch(e){ if(!window.__austinErr){ window.__austinErr=String(e&&e.stack||e); console.log('AUSTINLOOP '+window.__austinErr); } }
+  }
+  c3AddBox(group, cx, cz, w, d, y0, y1, mats){
+    const THREE=window.THREE; const hgt=Math.max(0.01,y1-y0);
+    const geo=new THREE.BoxGeometry(w,hgt,d);
+    const mesh=new THREE.Mesh(geo, mats.face); mesh.position.set(cx,(y0+y1)/2,cz); mesh.castShadow=true; mesh.receiveShadow=true; group.add(mesh);
+    const eg=new THREE.EdgesGeometry(geo); const line=new THREE.LineSegments(eg, mats.edge); line.position.copy(mesh.position); group.add(line);
+    return mesh;
+  }
+  c3Structure(group, b, mats){
+    const THREE=window.THREE; const x=b.x, z=b.z, w=b.w, d=b.d, H=b.h, t=b.t||'box';
+    const F=mats.face, E=mats.edge;
+    const addEdges=(geo,px,py,pz,ry)=>{ const l=new THREE.LineSegments(new THREE.EdgesGeometry(geo,28),E); l.position.set(px,py,pz); if(ry)l.rotation.y=ry; group.add(l); };
+    const mesh=(geo,px,py,pz,ry,edge)=>{ const m=new THREE.Mesh(geo,F); m.position.set(px,py,pz); if(ry)m.rotation.y=ry; m.castShadow=true; m.receiveShadow=true; group.add(m); if(edge!==false) addEdges(geo,px,py,pz,ry); return m; };
+    const box=(cx,cz,bw,bd,y0,y1,ry)=>{ const g=new THREE.BoxGeometry(bw,Math.max(0.01,y1-y0),bd); mesh(g,cx,(y0+y1)/2,cz,ry); };
+    const cylr=(r0,r1,y0,y1,seg,edge)=>{ const g=new THREE.CylinderGeometry(r1,r0,(y1-y0),seg||28); mesh(g,x,(y0+y1)/2,z,0,edge); };
+    if(t==='jenga'){ // The Independent — stacked offset cuboids (slender)
+      const n=5, s=H/n, ofx=[0,-0.42,0.34,-0.22,0.12], ofz=[0,0.30,-0.26,0.20,-0.10], rr=[0,0.05,-0.04,0.06,-0.03];
+      for(let k=0;k<n;k++){ box(x+ofx[k]*w, z+ofz[k]*d, w*0.94, d*0.78, k*s, (k+1)*s, rr[k]); }
+      box(x+ofx[4]*w, z+ofz[4]*d, w*0.5, d*0.4, H, H*1.015, rr[4]);
+    }
+    else if(t==='taper'){ // The Austonian — square body, rounded tapered top + spire
+      box(x,z,w,d,0,H*0.82); box(x,z,w*0.8,d*0.8,H*0.82,H*0.9);
+      const cap=new THREE.SphereGeometry(w*0.42,24,12,0,Math.PI*2,0,Math.PI*0.42); mesh(cap,x,H*0.9,z,0,false);
+      cylr(w*0.05,w*0.012,H*0.97,H*1.34,12,false);
+    }
+    else if(t==='owl'){ // Frost Bank — glass body + four corner 'owl-ear' pinnacles
+      box(x,z,w,d,0,H*0.84);
+      const cr=H*0.84; box(x,z,w*0.86,d*0.86,cr,cr+H*0.05);
+      const pin=(ox,oz)=>{ const c=new THREE.ConeGeometry(w*0.16,H*0.26,4); const m=new THREE.Mesh(c,F); m.position.set(x+ox*w*0.34,cr+H*0.05+H*0.13,z+oz*d*0.34); m.rotation.y=Math.PI/4; m.castShadow=true; group.add(m); group.add(new THREE.LineSegments(new THREE.EdgesGeometry(c),E).translateX(m.position.x).translateY(m.position.y).translateZ(m.position.z)); m.children; const ln=group.children[group.children.length-1]; ln.rotation.y=Math.PI/4; };
+      pin(-1,-1); pin(1,-1); pin(1,1); pin(-1,1);
+      const ctr=new THREE.ConeGeometry(w*0.22,H*0.2,4); const cm=new THREE.Mesh(ctr,F); cm.position.set(x,cr+H*0.05+H*0.1,z); cm.rotation.y=Math.PI/4; cm.castShadow=true; group.add(cm);
+    }
+    else if(t==='glass'){ // 360 Condos — round tower, tapered round crown + spire
+      cylr(w*0.5,w*0.46,0,H*0.86,30); cylr(w*0.46,w*0.30,H*0.86,H*0.96,28,false);
+      const cone=new THREE.ConeGeometry(w*0.30,H*0.12,28); mesh(cone,x,H*0.96+H*0.06,z,0,false);
+      cylr(w*0.03,w*0.01,H*1.02,H*1.3,10,false);
+    }
+    else if(t==='sail'){ // Google tower — curved, leaning 'sail' facade (extruded along a curve)
+      const prof=new THREE.Shape(); const hw=w*0.5, hd=d*0.5;
+      prof.moveTo(-hw,0); prof.quadraticCurveTo(0,hd*1.4,hw,0); prof.quadraticCurveTo(0,-hd*0.5,-hw,0);
+      const path=new THREE.CatmullRomCurve3([new THREE.Vector3(0,0,0),new THREE.Vector3(H*0.04,H*0.35,0),new THREE.Vector3(H*0.13,H*0.7,0),new THREE.Vector3(H*0.30,H,0)]);
+      const g=new THREE.ExtrudeGeometry(prof,{steps:48,extrudePath:path,bevelEnabled:false});
+      const m=new THREE.Mesh(g,F); m.position.set(x,0,z); m.castShadow=true; group.add(m);
+      group.add(new THREE.LineSegments(new THREE.EdgesGeometry(g,18),E).translateX(x).translateZ(z));
+    }
+    else if(t==='stepped'){ // Waterline — tallest, gentle twist/taper
+      const n=7, s=H/n; for(let k=0;k<n;k++){ const sc=1-0.045*k; box(x,z,w*sc,d*sc,k*s,(k+1)*s, 0.06*k); }
+      box(x,z,w*0.5,d*0.5,H,H*1.02,0.06*n);
+    }
+    else if(t==='indeedtop'){ box(x,z,w,d,0,H*0.84); box(x+w*0.14,z,w*0.7,d*0.92,H*0.84,H); }
+    else if(t==='slab'){ box(x,z,w,d,0,H); }
+    else if(t==='dome'){ // Texas Capitol — base + drum + dome + lantern
+      box(x,z,w,d*0.7,0,H*0.42); box(x,z,w*0.46,d*0.32,H*0.42,H*0.56);
+      cylr(w*0.2,w*0.18,H*0.56,H*0.72,24,false);
+      const dome=new THREE.SphereGeometry(w*0.21,26,16,0,Math.PI*2,0,Math.PI/2); mesh(dome,x,H*0.72,z,0,false);
+      cylr(w*0.04,w*0.04,H*0.72+w*0.21,H*0.95,10,false); cylr(w*0.015,w*0.001,H*0.95,H*1.05,8,false);
+    }
+    else { box(x,z,w,d,0,H); }
+  }
+  c3LakeCenterline(){
+    return [
+      {x:20,z:200,w:92},{x:12,z:152,w:90},{x:0,z:112,w:84},{x:-12,z:74,w:76},
+      {x:-22,z:38,w:64},{x:-44,z:14,w:52},{x:-86,z:3,w:42},{x:-138,z:-7,w:34}
+    ];
+  }
+  c3LakeOutline(){
+    const cl=this.c3LakeCenterline(), L=[],R=[];
+    for(let i=0;i<cl.length;i++){
+      const a=cl[Math.max(0,i-1)], b=cl[Math.min(cl.length-1,i+1)];
+      let tx=b.x-a.x, tz=b.z-a.z; const len=Math.hypot(tx,tz)||1; tx/=len; tz/=len;
+      const nx=-tz, nz=tx; const hw=cl[i].w/2;
+      L.push({x:cl[i].x+nx*hw, z:cl[i].z+nz*hw}); R.push({x:cl[i].x-nx*hw, z:cl[i].z-nz*hw});
+    }
+    return {L,R};
+  }
+  buildCity3D(){
+    const THREE=window.THREE, scene=this.c3Scene;
+    if(this.c3City){ scene.remove(this.c3City); }
+    const city=new THREE.Group(); this.c3City=city; scene.add(city);
+    const cell=16, ax=(a)=>(a-7)*cell, sz=(s)=>(8-s)*cell;   // a:0..14 avenues W->E (Congress=7), s:1..15 streets S->N
+    const aMin=0,aMax=14,sMin=1,sMax=15;
+    // model ground (warm paper)
+    const ground=new THREE.Mesh(new THREE.PlaneGeometry(1000,1000), new THREE.MeshStandardMaterial({color:0xe2ded3,roughness:1.0}));
+    ground.rotation.x=-Math.PI/2; ground.position.set(0,-0.12,40); ground.receiveShadow=true; city.add(ground);
+    // Lady Bird Lake — curved band south of 1st St
+    const lp=[]; const seg=16;
+    for(let i=0;i<=seg;i++){ const t=i/seg; lp.push({x:-170+t*340, z:128+Math.sin(t*Math.PI)*26 - t*14}); }
+    const sh=new THREE.Shape(); sh.moveTo(lp[0].x,lp[0].z);
+    for(let i=1;i<lp.length;i++) sh.lineTo(lp[i].x,lp[i].z);
+    for(let i=lp.length-1;i>=0;i--) sh.lineTo(lp[i].x, lp[i].z+50);
+    sh.closePath();
+    const lg=new THREE.ShapeGeometry(sh); lg.rotateX(-Math.PI/2);
+    const lake=new THREE.Mesh(lg, new THREE.MeshStandardMaterial({color:0x6f93a6,roughness:0.22,metalness:0.5})); lake.position.y=0.0; city.add(lake);
+    // road grid
+    const rPos=[];
+    for(let a=aMin;a<=aMax;a++){ const x=ax(a); rPos.push(x,0,sz(sMin), x,0,sz(sMax)); }
+    for(let s=sMin;s<=sMax;s++){ const z=sz(s); rPos.push(ax(aMin),0,z, ax(aMax),0,z); }
+    const rg=new THREE.BufferGeometry(); rg.setAttribute('position', new THREE.Float32BufferAttribute(rPos,3));
+    const roads=new THREE.LineSegments(rg, new THREE.LineBasicMaterial({color:0x9a978c,transparent:true,opacity:0.7})); roads.position.y=0.06; city.add(roads); this.c3Streets=roads;
+    // Congress Avenue highlight (central spine to the Capitol)
+    const cgL=sz(sMax), cgS=sz(sMin); const cg=new THREE.Mesh(new THREE.BoxGeometry(3.4,0.18,(cgS-cgL)), new THREE.MeshStandardMaterial({color:0xd9a878,roughness:1})); cg.position.set(ax(7),0.13,(cgL+cgS)/2); city.add(cg);
+    // I-35 (angled double ribbon, east edge)
+    const fwMat=new THREE.MeshStandardMaterial({color:0xb9b4a6,roughness:1});
+    const fw=new THREE.Mesh(new THREE.BoxGeometry(7,0.2,(sMax-sMin)*cell+60), fwMat); fw.position.set(ax(14)+6,0.14, (sz(sMin)+sz(sMax))/2); fw.rotation.y=0.06; city.add(fw);
+    // accurate curved-shape towers, placed on real blocks
+    const mats={ face:new THREE.MeshStandardMaterial({color:0xf4f3ee,roughness:0.88,metalness:0.0}),
+                 edge:new THREE.LineBasicMaterial({color:0x32322e,transparent:true,opacity:0.34}) };
+    this.c3Mats=mats;
+    const ft=0.05;
+    const put=(a,s,w,d,hft,t)=>{ this.c3Structure(city,{x:ax(a),z:sz(s),w,d,h:hft*ft,t},mats); };
+    put(11,2, 15,15, 1022,'stepped');  // Waterline (tallest, E near lake)
+    put(4, 6, 14,14, 875,'indeedtop'); // Sixth & Guadalupe
+    put(1, 3, 14,14, 690,'jenga');     // The Independent (Warehouse, NW)
+    put(7, 2, 14,14, 683,'taper');     // The Austonian (Congress & 2nd)
+    put(4, 5, 13,13, 666,'glass');     // 6 X Guadalupe
+    put(7, 4, 15,15, 515,'owl');       // Frost Bank (Congress & 4th)
+    put(2, 3, 13,13, 581,'glass');     // 360 Condos (Nueces & 3rd)
+    put(2, 2, 13,7,  430,'sail');      // Google sail (2nd & Nueces)
+    put(12,3, 13,13, 590,'slab');      // Fairmont (Red River & 3rd)
+    put(9, 6, 14,14, 650,'indeedtop'); // Indeed Tower (San Jacinto & 6th)
+    put(1, 4, 12,12, 480,'glass');     // Northshore
+    put(4, 4, 13,13, 620,'stepped');   // The Republic (Guadalupe & 4th)
+    put(13,1, 12,22, 560,'slab');      // 70 Rainey
+    put(13,1, 12,12, 500,'box');       // 44 East Ave cluster
+    put(7, 1, 13,13, 515,'box');       // One Eleven Congress
+    put(9, 4, 12,12, 470,'box');       // San Jacinto block
+    put(7,11, 24,24, 311,'dome');      // Texas Capitol (Congress & 11th, N)
+    // low/mid-rise filler density
+    const rng=(s)=>{ const v=Math.sin(s*91.7)*43758.5; return v-Math.floor(v); };
+    let i=0,placed=0;
+    while(placed<60 && i<400){ i++; const a=aMin+ (rng(i*1.7)*(aMax-aMin)); const s=sMin+ (rng(i*2.3)*(sMax-sMin)); if(rng(i*3.7)<0.35){ continue; } const dCore=Math.hypot(ax(a)-0, sz(s)-60); const cn=Math.max(0,1-dCore/170); const hft=70+rng(i*5.1)*150+cn*cn*200; put(a,s, 6+rng(i*4)*5, 6+rng(i*6)*5, hft,'box'); placed++; }
+  }
+  updateCity3DTheme(){
+    if(!this.c3Scene) return; const col=this.c3Colors();
+    if(this.c3Mats){ this.c3Mats.face.color.setHex(col.face); this.c3Mats.edge.color.setHex(col.edge); }
+    if(this.c3Scene.fog) this.c3Scene.fog.color.setHex(col.fog);
+    if(this.c3Streets) this.c3Streets.material.color.setHex(col.street);
+    if(this.c3Lake && this.c3Lake.material && this.c3Lake.material.color) { try{ this.c3Lake.material.color.setHex(col.water); }catch(e){} }
+  }
+  sizeCity3D(){
+    if(!this.c3Renderer||!this.c3El) return;
+    const w=this.c3El.clientWidth||window.innerWidth, hh=this.c3El.clientHeight||window.innerHeight;
+    if(!w||!hh) return;
+    this.c3Renderer.setSize(w,hh,false);
+    this.c3Cam.aspect=w/hh; this.c3Cam.updateProjectionMatrix();
+  }
+  renderCity3D(cp){
+    if(!this.c3Renderer||!this.c3Cam) return;
+    const e=(t)=>t*t*(3-2*t);
+    const cx=0, cz=58, t=this.clamp(cp,0,1);
+    const ang=-2.25 + e(t)*1.95;
+    const rad=270 - e(this.clamp((t-0.25)/0.75,0,1))*150;
+    const hgt=215 - e(this.clamp((t-0.15)/0.85,0,1))*168;
+    this.c3Cam.position.set(cx+Math.cos(ang)*rad, Math.max(16,hgt), cz+Math.sin(ang)*rad);
+    this.c3Cam.lookAt(cx, 12, cz);
+    this.c3Renderer.render(this.c3Scene,this.c3Cam);
+  }
+  initCityMap(){
+    this.mapEl=this.root.querySelector('[data-citymap]');
+    if(!this.mapEl) return;
+    this.mapCtx=this.mapEl.getContext('2d');
+    this.sizeMap();
+    window.addEventListener('resize', ()=>this.sizeMap());
+  }
+  sizeMap(){
+    if(!this.mapEl||!this.mapCtx) return;
+    const dpr=Math.min(window.devicePixelRatio||1,2);
+    const w=this.mapEl.clientWidth||window.innerWidth, hh=this.mapEl.clientHeight||window.innerHeight;
+    if(!w||!hh) return;
+    this.mapEl.width=Math.round(w*dpr); this.mapEl.height=Math.round(hh*dpr);
+    this.mapCtx.setTransform(dpr,0,0,dpr,0,0);
+    this.mapW=w; this.mapH=hh;
+    if(this._mapCp!=null) this.drawCityMap(this._mapCp);
+  }
+  drawCityMap(cp){
+    if(!this.mapCtx) return;
+    this._mapCp=cp;
+    const ctx=this.mapCtx, w=this.mapW, hh=this.mapH, cl=(v,a,b)=>Math.max(a,Math.min(b,v));
+    ctx.clearRect(0,0,w,hh);
+    const cs=getComputedStyle(this.root);
+    const hx=(v,d)=>{ v=(v||'').trim(); if(v[0]==='#'){ if(v.length===4) v='#'+v[1]+v[1]+v[2]+v[2]+v[3]+v[3]; return [parseInt(v.slice(1,3),16),parseInt(v.slice(3,5),16),parseInt(v.slice(5,7),16)]; } return d; };
+    const fg=hx(cs.getPropertyValue('--fg'),[13,13,13]);
+    const F=(a)=>'rgba('+fg[0]+','+fg[1]+','+fg[2]+','+a+')';
+    const O='#e87500';
+    const cell=24, aMin=0,aMax=14,sMin=1,sMax=15;
+    const gW=(aMax-aMin)*cell, gH=(sMax-sMin)*cell;
+    const k=cl(cp,0,1);
+    const scale=Math.min(w*0.84/gW, hh*0.62/gH)*(0.95+k*0.13);
+    const ox=w/2 + (1-k)*w*0.02, oy=hh*0.45 + (1-k)*hh*0.05;
+    const X=(a)=>ox+(a-7)*cell*scale, Y=(s)=>oy-(s-8)*cell*scale;
+    const lx0=X(aMin)-46*scale, lx1=X(aMax)+46*scale;
+    const yT=(t)=> Y(1)+10*scale + Math.sin(t*Math.PI)*24*scale - t*12*scale;
+    // Lady Bird Lake
+    ctx.beginPath(); ctx.moveTo(lx0,yT(0));
+    for(let i=1;i<=24;i++){ const t=i/24; ctx.lineTo(lx0+(lx1-lx0)*t, yT(t)); }
+    ctx.lineTo(lx1,hh+60); ctx.lineTo(lx0,hh+60); ctx.closePath();
+    ctx.fillStyle=F(0.07); ctx.fill(); ctx.strokeStyle=F(0.34); ctx.lineWidth=1.4; ctx.stroke();
+    // street grid (clipped to north of the lake)
+    ctx.save(); ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(w,0); ctx.lineTo(w, yT(1)); for(let i=23;i>=0;i--){ const t=i/24; ctx.lineTo(lx0+(lx1-lx0)*t, yT(t)); } ctx.lineTo(0,yT(0)); ctx.closePath(); ctx.clip();
+    ctx.lineWidth=1; ctx.strokeStyle=F(0.15);
+    for(let a=aMin;a<=aMax;a++){ ctx.beginPath(); ctx.moveTo(X(a),Y(sMin)); ctx.lineTo(X(a),Y(sMax)); ctx.stroke(); }
+    for(let s=sMin;s<=sMax;s++){ ctx.beginPath(); ctx.moveTo(X(aMin),Y(s)); ctx.lineTo(X(aMax),Y(s)); ctx.stroke(); }
+    ctx.strokeStyle=F(0.3); ctx.lineWidth=1.7; [1,6].forEach(s=>{ ctx.beginPath(); ctx.moveTo(X(aMin),Y(s)); ctx.lineTo(X(aMax),Y(s)); ctx.stroke(); });
+    // a few key blocks (filled)
+    ctx.fillStyle=F(0.12);
+    ctx.fillRect(X(6.6),Y(13.4),(X(7.4)-X(6.6)),(Y(11.6)-Y(13.4))); // Capitol grounds
+    ctx.fillRect(X(8.1),Y(5.0),(X(9.9)-X(8.1)),(Y(3.2)-Y(5.0)));   // Convention Center
+    ctx.restore();
+    // Congress Avenue (orange spine to the Capitol)
+    ctx.strokeStyle=O; ctx.lineWidth=2.8; ctx.beginPath(); ctx.moveTo(X(7),Y(sMin)); ctx.lineTo(X(7),Y(12.6)); ctx.stroke();
+    ctx.fillStyle=O; ctx.beginPath(); ctx.arc(X(7),Y(12.4),4.2,0,2*Math.PI); ctx.fill();
+    // I-35 (angled, east)
+    ctx.strokeStyle=F(0.42); ctx.lineWidth=3.4; ctx.beginPath(); ctx.moveTo(X(13.5),Y(sMax)); ctx.lineTo(X(14.3),Y(sMin)); ctx.stroke();
+    // labels (themed)
+    const lab=(t,a,s,col,al)=>{ ctx.fillStyle=col; ctx.font='600 '+Math.max(8,Math.round(9*Math.min(1.4,scale/2.0)))+'px ui-monospace, Menlo, monospace'; ctx.textAlign=al||'center'; ctx.fillText(t, X(a), Y(s)); };
+    lab('WAREHOUSE', 2.6, 7.4, F(0.5)); lab('MARKET DIST.', 2.2, 10, F(0.45));
+    lab('RED RIVER', 11, 9, F(0.45)); lab('RAINEY ST.', 12, 2.4, F(0.45));
+    lab('6TH ST.', 9, 6.3, F(0.42));
+    ctx.save(); ctx.font='700 '+Math.max(9,Math.round(10*Math.min(1.4,scale/2.0)))+'px ui-monospace, Menlo, monospace'; ctx.textAlign='left'; ctx.fillStyle=O; ctx.fillText('CONGRESS AVE', X(7)+7, Y(8.6)); ctx.restore();
+    lab('LADY BIRD LAKE', 7, -1, F(0.5));
+    ctx.fillStyle=O; ctx.beginPath(); ctx.arc(X(7),Y(12.4),9+ (Math.sin(performance.now()/600)+1)*4,0,2*Math.PI); ctx.strokeStyle='rgba(232,117,0,0.4)'; ctx.lineWidth=1.2; ctx.stroke();
+  }
+  globeLoop(){
+    const zw=this.root && this.root.querySelector('[data-zoomwrap]');
+    let visible=false;
+    if(zw){ const r=zw.getBoundingClientRect(); visible = (r.bottom > -260 && r.top < window.innerHeight+260); }
+    this._cityVisible = visible;
+    if(this.globeReady && visible) this.drawGlobe();
+    this._globeRAF=requestAnimationFrame(()=>this.globeLoop());
+  }
+  updateCity3D(){}
+  cityLoop(){}
+  toggleTheme(){
+    this.mode = this.mode === 'dark' ? 'light' : 'dark';
+    this.applyTheme(this.mode);
+    try { localStorage.setItem('au-theme', this.mode); } catch(e){}
+  }
+  clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
+  splitLetters(el){
+    const frag = document.createDocumentFragment();
+    const spans = [];
+    Array.prototype.forEach.call(el.childNodes, node=>{
+      if(node.nodeType === 3){
+        node.textContent.split('').forEach(ch=>{
+          if(ch === ' '){ frag.appendChild(document.createTextNode('\u00A0')); return; }
+          const s = document.createElement('span');
+          s.textContent = ch; s.style.display = 'inline-block'; s.style.willChange = 'transform,opacity';
+          spans.push(s); frag.appendChild(s);
+        });
+      } else { frag.appendChild(node.cloneNode(true)); }
+    });
+    el.innerHTML = ''; el.appendChild(frag);
+    return spans;
+  }
+  hideSplit(spans){ spans.forEach(s=>{ s.style.opacity='0'; s.style.transform='translateY(1.1em) rotate(5deg)'; s.style.filter='blur(7px)'; s.style.transformOrigin='50% 100%'; }); }
+  applyGrad(spans){ spans.forEach(s=>{ s.style.backgroundImage=this.grad; s.style.backgroundSize='300% 100%'; s.style.webkitBackgroundClip='text'; s.style.backgroundClip='text'; s.style.color='transparent'; s.style.animation='auFlow 5s linear infinite'; }); }
+  revealSplit(spans){ spans.forEach((s,i)=>{ s.style.transition='transform .92s cubic-bezier(.16,.9,.24,1), opacity .7s ease, filter .7s ease'; s.style.transitionDelay=(i*40)+'ms'; requestAnimationFrame(()=>{ s.style.transform='translateY(0) rotate(0)'; s.style.opacity='1'; s.style.filter='blur(0)'; }); }); }
+  primeReveal(el){ el.style.willChange='opacity,transform,filter'; el.style.transition='opacity 1s cubic-bezier(.2,.7,.2,1), transform 1.05s cubic-bezier(.16,.9,.24,1), filter .9s ease'; el.style.opacity='0'; el.style.transform='translateY(52px) scale(.965)'; el.style.filter='blur(9px)'; }
+  fireReveal(el){ el.style.opacity='1'; el.style.transform='none'; el.style.filter='blur(0)'; }
+  countUp(el){
+    const target = parseFloat(el.getAttribute('data-count'));
+    const suf = el.getAttribute('data-suffix') || '';
+    const dec = parseInt(el.getAttribute('data-dec') || '0', 10);
+    const dur = 1200, t0 = performance.now();
+    const step = (t)=>{ const p=Math.min(1,(t-t0)/dur); const e=1-Math.pow(1-p,3); const v=target*e; el.textContent=(dec>0?v.toFixed(dec):Math.round(v))+suf; if(p<1) requestAnimationFrame(step); };
+    requestAnimationFrame(step);
+  }
+  scrubCount(el,e){ const t=parseFloat(el.getAttribute('data-count')); const suf=el.getAttribute('data-suffix')||''; const dec=parseInt(el.getAttribute('data-dec')||'0',10); const v=t*e; el.textContent=(dec>0?v.toFixed(dec):Math.round(v))+suf; }
+  driveStats(vh){ if(!this.statcols||!this.statcols.length) return; for(const c of this.statcols){ const r=c.getBoundingClientRect(); const local=this.reduce?1:this.clamp((vh*0.9 - r.top)/(vh*0.42),0,1); const e=local*local*(3-2*local); c.style.opacity=String(0.12+e*0.88); c.style.transform='translateY('+((1-e)*56)+'px)'; const cnt=c.querySelector('[data-count]'); if(cnt) this.scrubCount(cnt,e); } }
+  componentDidMount(){
+    this.root = document.querySelector('[data-au="AUSTIN"]');
+    if(!this.root) return;
+    let saved=null; try { saved=localStorage.getItem('au-theme'); } catch(e){}
+    if(saved==='dark'||saved==='light') this.mode=saved;
+    this.applyTheme(this.mode);
+    this.grad = 'linear-gradient(115deg,#bf5700 0%,#e87500 40%,#ffb066 60%,#e87500 80%,#bf5700 100%)';
+    this.reduce = !!this.props.reduceMotion || (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+
+    const hero = this.root.querySelector('[data-hero-mark]');
+    if(hero){ const spans=this.splitLetters(hero); this.applyGrad(spans); if(this.reduce){spans.forEach(s=>s.style.opacity='1');} else { this.hideSplit(spans); setTimeout(()=>this.revealSplit(spans),140); } }
+
+    this.revealEl = (el)=>{
+      if(el._revealed) return; el._revealed=true;
+      if(el.hasAttribute('data-split') && el._spans){ this.revealSplit(el._spans); }
+      else if(el.hasAttribute('data-count')){ this.countUp(el); }
+      else { this.fireReveal(el); }
+    };
+    this.revealables = [];
+    const io = new IntersectionObserver((entries)=>{ entries.forEach(e=>{ if(e.isIntersecting){ this.revealEl(e.target); io.unobserve(e.target); } }); }, { threshold:0.15, rootMargin:'0px 0px -6% 0px' });
+
+    this.root.querySelectorAll('[data-split]').forEach(el=>{ const spans=this.splitLetters(el); el._spans=spans; if(el.hasAttribute('data-grad')) this.applyGrad(spans); if(this.reduce){spans.forEach(s=>s.style.opacity='1');el._revealed=true;} else { this.hideSplit(spans); this.revealables.push(el); io.observe(el);} });
+    this.root.querySelectorAll('[data-reveal]').forEach(el=>{ if(this.reduce){el.style.opacity='1';el.style.transform='none';el._revealed=true;return;} this.primeReveal(el); const d=el.getAttribute('data-reveal-delay'); if(d) el.style.transitionDelay=parseInt(d,10)+'ms'; this.revealables.push(el); io.observe(el); });
+    this.root.querySelectorAll('[data-count]').forEach(el=>{ if(el.closest('[data-statcol]')) return; if(this.reduce){ const dec=parseInt(el.getAttribute('data-dec')||'0',10); el.textContent=(dec>0?parseFloat(el.getAttribute('data-count')).toFixed(dec):el.getAttribute('data-count'))+(el.getAttribute('data-suffix')||''); el._revealed=true; return; } this.revealables.push(el); io.observe(el); });
+    this.statcols = Array.prototype.slice.call(this.root.querySelectorAll('[data-statcol]'));
+    this.statcols.forEach(c=>{ c.style.willChange='opacity,transform'; if(!this.reduce){ c.style.opacity='0'; c.style.transform='translateY(56px)'; } });
+
+    const read = this.root.querySelector('[data-read]');
+    if(read){ const text=read.textContent.trim(); read.textContent=''; this.readWords=[]; text.split(/\s+/).forEach(w=>{ const s=document.createElement('span'); s.textContent=w+' '; s.style.color='var(--muted)'; s.style.transition='color .25s ease'; read.appendChild(s); this.readWords.push(s); }); }
+
+    // landmark stage data
+    this.stageData = [
+      {num:'01', name:'The Capitol & Congress Ave', fact:'Texas built one of America’s grandest state capitols. Austin’s pink-granite dome, finished in 1888, stands even taller than the U.S. Capitol in Washington.'},
+      {num:'02', name:'Downtown & the towers', fact:'A skyline that has shot upward in the last decade — home to some of the tallest towers in the southern United States.'},
+      {num:'03', name:'Lady Bird Lake & Zilker', fact:'The Colorado River widens into Lady Bird Lake right downtown — framed by Zilker Park and the spring-fed Barton Springs pool.'}
+    ];
+    this._stageIdx=-1;
+
+    // about-the-city scroll sequence
+    this.aboutData = [
+      {n:'01', tag:'Capital city', title:'The capital of Texas.', body:'Texas is one of the 50 United States — and Austin is its capital, the city where the whole state is governed, a role it has held since 1839.'},
+      {n:'02', tag:'Live Music Capital', title:'The Live Music Capital of the World.', body:'Austin has more live-music venues per person than any U.S. city — and every year the world shows up for its SXSW and ACL festivals.'},
+      {n:'03', tag:'Silicon Hills', title:'A booming tech city.', body:'Nicknamed “Silicon Hills,” Austin is one of America’s biggest technology hubs, with a huge university and a fast-growing cluster of tech campuses.'},
+      {n:'04', tag:'The bats', title:'1.5 million bats at dusk.', body:'Each summer evening at sunset, around 1.5 million bats stream out from under a downtown bridge — the largest urban bat colony in North America, and a free nightly show.'},
+      {n:'05', tag:'Keep Austin Weird', title:'Proudly, defiantly weird.', body:'“Keep Austin Weird” is the city’s unofficial motto — a celebration of its independent shops, offbeat characters, and refusal to look like anywhere else.'},
+      {n:'06', tag:'The University', title:'Burnt orange by tradition.', body:'The University of Texas at Austin opened in 1883. Its color is burnt orange — the same orange running across this page — and its tower glows orange after a big win.'}
+    ];
+    this._aboutIdx=-1;
+    const adots=this.root.querySelector('[data-about-dots]');
+    if(adots){ this.aboutData.forEach(()=>{ const d=document.createElement('span'); d.style.cssText='width:8px;height:8px;border-radius:50%;background:var(--fg,#0b0b0b);opacity:.22;transition:opacity .3s ease,transform .3s ease'; adots.appendChild(d); }); }
+
+    // dusk warmth base colors
+    this.duskBase = { light:[255,255,255], dark:[10,10,10] };
+    this.duskTo   = { light:[250,236,222], dark:[26,15,8] };
+
+    // global zoom map — compute pin origin
+    this.zoomStage = this.root.querySelector('[data-zoomstage]');
+    this.zoomCross = this.root.querySelector('[data-zoomcross]');
+    this.computeZoom = ()=>{
+      const wrap = this.root.querySelector('[data-zoomwrap]');
+      if(!wrap) return;
+      const pw = wrap.clientWidth, ph = window.innerHeight;
+      let scale, offX, offY;
+      if(pw/ph < 2){ scale = pw/1000; offX = 0; offY = (ph - 500*scale)/2; }
+      else { scale = ph/500; offY = 0; offX = (pw - 1000*scale)/2; }
+      this.pinX = offX + 228*scale; this.pinY = offY + 166*scale;
+      if(this.zoomStage) this.zoomStage.style.transformOrigin = this.pinX+'px '+this.pinY+'px';
+      if(this.zoomCross){ this.zoomCross.style.left = this.pinX+'px'; this.zoomCross.style.top = this.pinY+'px'; }
+    };
+    this.computeZoom();
+    this.zoomLabels = [
+      {p:0.00,l:'Earth',c:'Earth'},
+      {p:0.22,l:'North America',c:'Northern Hemisphere'},
+      {p:0.38,l:'United States',c:'30.3° N · 97.7° W'},
+      {p:0.48,l:'Texas',c:'The Lone Star State'},
+      {p:0.58,l:'Austin',c:'30.27° N · 97.74° W'},
+      {p:0.74,l:'Downtown',c:'Congress Ave · Lady Bird Lake'},
+      {p:0.90,l:'The skyline',c:'Recreated at 1.5 : 1'}
+    ];
+    this._zoomIdx=-1;
+
+    // hook 'em popup — random one-time trigger
+    this.hookem = this.root.querySelector('[data-hookem]');
+    this.hookThreshold = 0.34 + Math.random()*0.34;
+    this._hookShown = false;
+    const closeBtn = this.root.querySelector('[data-hookem-close]');
+    if(closeBtn) closeBtn.addEventListener('click', ()=> this.hideHookem());
+
+    this.velrows = Array.prototype.slice.call(this.root.querySelectorAll('[data-velrow]'));
+    this._lastSy = window.scrollY || 0; this.vel = 0;
+
+    this.initGlobe();
+    this.initCityMap();
+    this.globeLoop();
+    this.onScroll = ()=>{ if(this._raf) return; this._raf=requestAnimationFrame(()=>{ this._raf=null; this.tick(); }); };
+    this.onResize = ()=>{ if(this.sizeGlobe) this.sizeGlobe(); if(this.computeZoom) this.computeZoom(); this.onScroll(); };
+    window.addEventListener('scroll', this.onScroll, { passive:true });
+    window.addEventListener('resize', this.onResize);
+    this.tick();
+  }
+  componentWillUnmount(){ window.removeEventListener('scroll', this.onScroll); window.removeEventListener('resize', this.onResize); if(this._globeRAF) cancelAnimationFrame(this._globeRAF); if(this._gi) clearTimeout(this._gi); }
+  showHookem(){ if(!this.hookem || this._hookShown) return; this._hookShown = true; this.hookem.style.opacity='1'; this.hookem.style.transform='translateY(0) scale(1)'; const em=this.hookem.querySelector('[data-hookem-emoji]'); if(em){ em.animate([{transform:'rotate(0)'},{transform:'rotate(-18deg)'},{transform:'rotate(14deg)'},{transform:'rotate(0)'}],{duration:700,easing:'ease-in-out'}); } if(this._hookT) clearTimeout(this._hookT); this._hookT = setTimeout(()=>this.hideHookem(), 6000); }
+  hideHookem(){ if(!this.hookem) return; this.hookem.style.opacity='0'; this.hookem.style.transform='translateY(22px) scale(.96)'; }
+  lerpCol(a,b,t){ return 'rgb('+Math.round(a[0]+(b[0]-a[0])*t)+','+Math.round(a[1]+(b[1]-a[1])*t)+','+Math.round(a[2]+(b[2]-a[2])*t)+')'; }
+  tick(){
+    if(!this.root) return;
+    const vh = window.innerHeight;
+    const sy = window.scrollY || window.pageYOffset || 0;
+    const raw = sy - (this._lastSy != null ? this._lastSy : sy);
+    this._lastSy = sy;
+    this.vel = (this.vel || 0) * 0.82 + raw * 0.18;
+    if(!this.reduce && this.velrows && this.velrows.length){
+      const sk = this.clamp(this.vel * 0.05, -7, 7);
+      const tx = this.clamp(this.vel * 0.6, -40, 40);
+      this.velrows.forEach(r=>{ const dir = parseFloat(r.getAttribute('data-velrow')) || 1; const p = r.parentElement; if(p) p.style.transform = 'skewX(' + (sk * dir) + 'deg) translateX(' + (tx * dir) + 'px)'; });
+    }
+
+    const max=document.documentElement.scrollHeight-vh;
+    const gp = this.clamp(max>0?sy/max:0,0,1);
+    const prog = this.root.querySelector('[data-prog]');
+    if(prog){ prog.style.transform='scaleX('+gp+')'; }
+    const nav = this.root.querySelector('[data-nav]');
+    if(nav) nav.style.borderBottomColor = sy>12 ? 'var(--line)' : 'transparent';
+
+    // dusk warmth (golden hour as you descend)
+    if(this.duskBase){ const t=this.clamp((gp-0.35)/0.6,0,1); const a=this.duskBase[this.mode], b=this.duskTo[this.mode]; this.root.style.backgroundColor = this.lerpCol(a,b,t); }
+
+    // hook 'em random one-time popup
+    if(!this._hookShown && gp > this.hookThreshold) this.showHookem();
+
+    // global 3d globe zoom
+    const zw = this.root.querySelector('[data-zoomwrap]');
+    if(zw){
+      const r=zw.getBoundingClientRect(); const total=zw.offsetHeight-vh; const p=this.clamp((-r.top)/(total||1),0,1);
+      this._zoomP = p;
+      const gc=this.root.querySelector('[data-globe]'); if(gc) gc.style.opacity=String(this.clamp(1-(p-0.42)/0.12,0,1));
+      const mp=this.root.querySelector('[data-citymap]'); if(mp){ const a=this.clamp((p-0.40)/0.13,0,1); mp.style.opacity=String(a); if(a>0) this.drawCityMap(this.clamp((p-0.44)/0.56,0,1)); }
+      let idx=0; for(let i=0;i<this.zoomLabels.length;i++){ if(p>=this.zoomLabels[i].p) idx=i; }
+      if(idx!==this._zoomIdx){ this._zoomIdx=idx; const lab=this.root.querySelector('[data-zoomlabel]'); const co=this.root.querySelector('[data-zoomcoord]'); if(lab) lab.textContent=this.zoomLabels[idx].l; if(co) co.textContent=this.zoomLabels[idx].c; }
+    }
+
+    if(!this.reduce){
+      const hm=this.root.querySelector('[data-hero-mark]');
+      if(hm){ const p=this.clamp(sy/vh,0,1); hm.style.transform='translate3d(0,0,0)'; hm.style.opacity=String(1-p*0.6); }
+      this.root.querySelectorAll('[data-parallax]').forEach(el=>{ const sp=parseFloat(el.getAttribute('data-parallax')); el.style.transform='translate3d(0,'+(sy*sp)+'px,0)'; });
+      const pimg=this.root.querySelector('[data-pimg]');
+      if(pimg){ const r=pimg.parentElement.getBoundingClientRect(); const center=(r.top+r.height/2)-vh/2; pimg.style.transform='translate3d(0,'+(center*0.12)+'px,0)'; }
+    }
+
+    const wrap=this.root.querySelector('[data-read-wrap]');
+    if(wrap && this.readWords){ const r=wrap.getBoundingClientRect(); const total=wrap.offsetHeight-vh; const p=this.clamp((-r.top)/(total||1),0,1); const n=Math.floor(p*this.readWords.length*1.18); for(let i=0;i<this.readWords.length;i++){ this.readWords[i].style.color = i<n ? 'var(--fg)' : 'var(--muted)'; } }
+
+    // landmark stage swap
+    const sw=this.root.querySelector('[data-stagewrap]');
+    if(sw && this.stageData){ const r=sw.getBoundingClientRect(); const total=sw.offsetHeight-vh; const p=this.clamp((-r.top)/(total||1),0,1); const idx=this.clamp(Math.floor(p*3),0,2); if(idx!==this._stageIdx){ this._stageIdx=idx; const d=this.stageData[idx]; const setT=(sel,v)=>{ const el=this.root.querySelector(sel); if(el) el.textContent=v; }; setT('[data-stage-num]', d.num); setT('[data-stage-name]', d.name); setT('[data-stage-fact]', d.fact); } }
+
+    // about-the-city scroll sequence
+    const ab=this.root.querySelector('[data-about]');
+    if(ab && this.aboutData){ const r=ab.getBoundingClientRect(); const total=ab.offsetHeight-vh; const p=this.clamp((-r.top)/(total||1),0,1); const n=this.aboutData.length; const idx=this.clamp(Math.floor(p*n*0.999),0,n-1); if(idx!==this._aboutIdx){ this._aboutIdx=idx; const d=this.aboutData[idx]; const set=(sel,v)=>{ const el=this.root.querySelector(sel); if(el){ el.style.opacity='0'; setTimeout(()=>{ el.textContent=v; el.style.opacity = sel==='[data-about-body]'?'0.66':'1'; }, 120); } }; set('[data-about-tag]', d.tag); set('[data-about-title]', d.title); set('[data-about-body]', d.body); const g=this.root.querySelector('[data-about-ghost]'); if(g) g.textContent=d.n; const c=this.root.querySelector('[data-about-count]'); if(c) c.textContent=d.n+' / 0'+n; const dots=this.root.querySelectorAll('[data-about-dots] span'); dots.forEach((dot,i)=>{ dot.style.opacity = i===idx?'1':'.22'; dot.style.transform = i===idx?'scale(1.5)':'scale(1)'; }); } }
+
+    const ht=this.root.querySelector('[data-htimeline]');
+    if(ht){ const track=ht.querySelector('[data-htrack]'); const r=ht.getBoundingClientRect(); const total=ht.offsetHeight-vh; const p=this.clamp((-r.top)/(total||1),0,1); const dist=Math.max(0,track.scrollWidth-window.innerWidth); const sk=this.clamp(this.vel*0.04,-5,5); track.style.transform='translate3d('+(-p*dist)+'px,0,0) skewX('+sk+'deg)'; const cnt=ht.querySelector('[data-hcount]'); if(cnt){ const i=Math.min(this.htotal,Math.floor(p*this.htotal)+1); cnt.textContent=String(i).padStart(2,'0')+' / 04'; } }
+
+    this.driveStats(vh);
+    if(this.revealables && this.revealables.length){ const m=vh*0.86; for(let i=this.revealables.length-1;i>=0;i--){ const el=this.revealables[i]; if(el._revealed){ this.revealables.splice(i,1); continue; } if(el.getBoundingClientRect().top < m){ this.revealEl(el); this.revealables.splice(i,1); } } }
+  }
+  renderVals(){ return { toggleTheme: () => this.toggleTheme() }; }
+}
+
+(function(){
+  function boot(){
+    var comp = new Component({ startMode: 'Light', reduceMotion: false });
+    var vals = (typeof comp.renderVals === 'function') ? (comp.renderVals() || {}) : {};
+    if (typeof comp.componentDidMount === 'function') comp.componentDidMount();
+    var nodes = document.querySelectorAll('[data-action]');
+    for (var i = 0; i < nodes.length; i++) {
+      (function(el){
+        var fn = vals[el.getAttribute('data-action')];
+        if (typeof fn === 'function') el.addEventListener('click', fn);
+      })(nodes[i]);
+    }
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+</script>
 </body>
 </html>

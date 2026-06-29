@@ -1,250 +1,257 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Havelle — Compbuild</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400..900&display=swap" rel="stylesheet">
-  <style>
-    :root{
-      --bg:#ffffff; --fg:#0a0a0a; --muted:#6b6b6b; --line: color-mix(in oklab, var(--fg) 12%, transparent);
-      --card: color-mix(in oklab, var(--fg) 5%, transparent); --max:1280px; --pad:clamp(16px,3vw,40px);
-      --accent:#1f8cff; --pink:#ff0675; --violet:#7c3cff;
-    }
-    [data-theme="dark"]{
-      --bg:#0a0a0a; --fg:#f5f5f5; --muted:#a4a4a4; --line: color-mix(in oklab, var(--fg) 16%, transparent);
-      --card: color-mix(in oklab, var(--fg) 6%, transparent);
-    }
-    *{box-sizing:border-box}
-    body{margin:0; font-family:"Manrope",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; background:var(--bg); color:var(--fg);}
-    a{color:inherit; text-decoration:none}
-    img{display:block; max-width:100%; height:auto}
-    .wrap{max-width:var(--max); margin-inline:auto; padding-inline:var(--pad)}
-    .stack{display:grid; gap:clamp(16px,2vw,28px)}
-
-    /* NAV (consistent with site) */
-    .nav{position:sticky; top:0; z-index:50; backdrop-filter:saturate(140%) blur(8px); background: color-mix(in oklab, var(--bg) 85%, transparent); border-bottom:1px solid var(--line)}
-    .nav-inner{display:flex; align-items:center; justify-content:space-between; padding:14px var(--pad)}
-    .brand{display:flex; align-items:center; gap:10px}
-    .brand img.logo{width:28px; height:28px}
-    .nav-links{display:flex; gap:20px; align-items:center}
-    .btn{display:inline-flex; align-items:center; gap:10px; border:1px solid var(--line); padding:10px 14px; border-radius:0}
-    .btn.arrow::after{content:"→"; margin-left:6px; transition:transform .2s ease}
-    .btn.arrow:hover::after{transform:translateX(3px)}
-
-    /* PARALLAX + HERO */
-    .parallax{position:relative; overflow:clip}
-    .hero{position:relative; min-height:80svh; display:grid; place-items:end start; border-bottom:1px solid var(--line)}
-    .hero-media{position:absolute; inset:0;}
-    .hero-media img{position:absolute; inset:-4%; width:108%; height:108%; object-fit:cover; filter:grayscale(1) contrast(1.05); opacity:.82; transform:translateY(var(--y,0px))}
-    .layer{position:absolute; inset:0; pointer-events:none}
-    .layer.glow-back{background:
-      radial-gradient(1000px 60% at 10% 15%, color-mix(in oklab,var(--fg) 6%, transparent), transparent),
-      radial-gradient(800px 50% at 90% 10%, color-mix(in oklab,var(--fg) 4%, transparent), transparent)}
-    .layer.glow-mid{background:
-      radial-gradient(600px 40% at 70% 70%, color-mix(in oklab,var(--fg) 5%, transparent), transparent)}
-    .hero-scrim{position:absolute; inset:auto 0 0 0; height:36svh; background:linear-gradient(to bottom, transparent, color-mix(in oklab,var(--bg) 85%, transparent) 60%, var(--bg))}
-    .hero .copy{position:relative; z-index:2; padding:clamp(36px,9vw,120px) var(--pad)}
-    .eyebrow{font-size:.9rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted)}
-    h1{font-size:clamp(36px,6.8vw,86px); line-height:1.02; margin:8px 0 12px}
-    .lead{color:var(--muted); font-size:clamp(16px,1.4vw,18px)}
-
-    /* SCATTER CHIPS */
-    .scatter{position:relative; margin-top:12px; height:120px}
-    .chip{position:absolute; padding:6px 10px; border:1px solid var(--line); background:color-mix(in oklab,var(--fg) 3%, transparent); font-size:.82rem; white-space:nowrap}
-
-    /* SECTIONS */
-    section{padding: clamp(60px, 10vw, 140px) 0; border-bottom:1px solid var(--line)}
-    h2{font-size:clamp(28px,4.5vw,44px); margin:0 0 12px}
-    h3{margin:.2rem 0 .4rem; font-size:1.15rem}
-    ul{margin:0; padding-left:1.2em}
-
-    /* FEATURE CARDS (tilt) */
-    .features{display:grid; grid-template-columns:repeat(12,1fr); gap:16px}
-    .feature{grid-column:span 12; border:1px solid var(--line); background:var(--card); padding:18px; transform-style:preserve-3d}
-    @media (min-width:900px){ .feature{grid-column:span 4} }
-
-    /* FACT BAR */
-    .facts{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px}
-    .fact{border:1px solid var(--line); padding:16px; background:var(--card)}
-    .fact b{font-size:clamp(22px,3.2vw,28px)}
-    @media (min-width:900px){ .facts{grid-template-columns: repeat(4, minmax(0,1fr));} }
-
-    /* Reveal */
-    .reveal{opacity:0; translate:0 10px; transition:opacity .6s ease, translate .6s ease}
-    .reveal.in{opacity:1; translate:0 0}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Havelle — Compbuild</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  html{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  body{margin:0}
+  ::selection{background:#b01818;color:#fff}
+  @keyframes hvRise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+</style>
 </head>
 <body>
-  <!-- NAV -->
-  <header class="nav">
-    <div class="nav-inner wrap">
-      <a href="/website/" class="brand" aria-label="Compbuild home">
-        <img class="logo" src="https://static.wixstatic.com/media/5f17e4_8d64bc05672c4787bcc7a5b3220e4303~mv2.png/v1/fill/w_53,h_53,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/5f17e4_8d64bc05672c4787bcc7a5b3220e4303~mv2.png" alt="Compbuild" />
-      </a>
-      <nav class="nav-links">
-        <a href="/website/#about">About</a>
-        <a href="/website/#projects">Projects</a>
-        <a href="/website/#pack">Textures</a>
-        <button id="themeToggle" class="btn arrow" aria-label="Toggle theme">Dark/Light</button>
-      </nav>
-    </div>
-  </header>
+<div data-hv="HAVELLE" style="font-family:Manrope,system-ui,sans-serif;background:var(--bg,#ffffff);color:var(--fg,#0b0b0b);transition:background-color .6s ease,color .6s ease;overflow-x:hidden">
 
-  <!-- HERO: layered parallax -->
-  <section class="hero parallax" id="top">
-    <div class="hero-media" aria-hidden="true">
-      <img class="bg" src="https://media.discordapp.net/attachments/772608163332489227/1403962809649463430/2025-05-09_18.56.24.png?ex=689a1e82&is=6898cd02&hm=9b5b949e69f0f5ab76ca4727116539789d7e178508c3a37a77d4bf996754002c&=&format=webp&quality=lossless&width=1521&height=856" alt="Havelle hero" />
-      <div class="layer glow-back" data-parallax data-speed="-0.25"></div>
-      <div class="layer glow-mid" data-parallax data-speed="-0.15"></div>
-      <div class="hero-scrim"></div>
+  <div style="position:fixed;top:0;left:0;right:0;height:2px;z-index:140;background:transparent"><div data-prog style="height:100%;width:100%;transform:scaleX(0);transform-origin:0 50%;background:linear-gradient(90deg,#9e1414,#cc2424,#e56a6a)"></div></div>
+
+  <!-- nav -->
+  <nav data-nav style="position:fixed;top:0;left:0;right:0;z-index:110;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:16px clamp(20px,4vw,56px);background:color-mix(in srgb,var(--bg,#fff) 78%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid transparent;transition:background-color .6s ease,border-color .35s ease">
+    <a href="index.html" style="display:flex;align-items:center;gap:11px;text-decoration:none;color:var(--fg,#0b0b0b)">
+      <img data-logo src="assets/logo.png" alt="Compbuild" style="height:22px;width:auto;display:block"/>
+      <span style="font-weight:700;font-size:16px;letter-spacing:-.01em">Compbuild</span>
+    </a>
+    <div style="display:flex;align-items:center;gap:clamp(16px,2.4vw,30px)">
+      <span style="font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;opacity:.5;display:flex;align-items:center;gap:9px"><span style="width:6px;height:6px;border-radius:50%;background:#b01818"></span>Havelle — European</span>
+      <a href="index.html#worlds" style="text-decoration:none;color:var(--fg,#0b0b0b);font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;opacity:.6">All projects</a>
+      <button data-action="toggleTheme" aria-label="Toggle theme" style="cursor:pointer;width:34px;height:34px;display:flex;align-items:center;justify-content:center;border:1px solid var(--line,rgba(11,11,11,.16));border-radius:999px;background:transparent;color:var(--fg,#0b0b0b);transition:border-color .3s ease">
+        <span style="width:13px;height:13px;border-radius:999px;border:1.5px solid var(--fg,#0b0b0b);background:linear-gradient(90deg,var(--fg,#0b0b0b) 0 50%,transparent 50% 100%)"></span>
+      </button>
     </div>
-    <div class="copy wrap reveal" data-parallax data-speed="0.06">
-      <div class="eyebrow">British Isles • Western Europe • Compbuild Textures</div>
-      <h1>Havelle — Stone & Moss</h1>
-      <p class="lead">Begotten of bog and marsh, Havelle rose slow along the River Elderal. Where reeds once grew, stone stands; the mist clings like a mantle and the river’s song endures. Steadfast and storied, her streets hold tales of ages past.</p>
-      <div class="scatter" aria-hidden="true">
-        <span class="chip" style="left:6%; top:18%" data-parallax data-speed="0.2">#StoneAndMoss</span>
-        <span class="chip" style="left:34%; top:6%" data-parallax data-speed="0.12">Traditional Blocks</span>
-        <span class="chip" style="left:74%; top:36%" data-parallax data-speed="0.18">Custom Flora</span>
-      </div>
-      <div class="cta" style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:10px">
-        <a class="btn arrow" href="https://discord.gg/compbuildredux" target="_blank" rel="noopener">Join Discord</a>
-        <span class="btn" data-copy="PLAY.COMPBUILDREDUX.NET" title="Copy server IP">IP: PLAY.COMPBUILDREDUX.NET</span>
-      </div>
+  </nav>
+
+  <!-- hero -->
+  <section style="position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:space-between;padding:clamp(98px,14vh,152px) clamp(20px,4vw,56px) clamp(28px,4vh,50px);overflow:hidden">
+    <div aria-hidden="true" style="position:absolute;top:-12%;right:-8%;width:62vw;height:62vw;max-width:800px;max-height:800px;border-radius:50%;background:radial-gradient(circle,rgba(190,40,40,.4) 0%,rgba(224,120,120,.2) 40%,transparent 68%);filter:blur(20px);pointer-events:none;z-index:0"></div>
+    <div aria-hidden="true" style="position:absolute;bottom:-24%;left:-12%;width:54vw;height:54vw;max-width:700px;max-height:700px;border-radius:50%;background:radial-gradient(circle,rgba(158,20,20,.3) 0%,transparent 66%);filter:blur(22px);pointer-events:none;z-index:0"></div>
+    <div style="position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;padding-bottom:clamp(22px,3.5vh,38px);border-bottom:1px solid var(--line,rgba(11,11,11,.14))">
+      <div data-parallax="0.04" style="font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;background:linear-gradient(115deg,#9e1414,#cc2424,#e56a6a);-webkit-background-clip:text;background-clip:text;color:transparent;animation:hvRise .9s .1s both">Project 04 — European</div>
+      <div data-parallax="0.08" style="font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;opacity:.55;text-align:center;animation:hvRise .9s .2s both">Stone &amp; Moss</div>
+      <div data-parallax="0.12" style="font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;opacity:.55;text-align:right;animation:hvRise .9s .3s both">5K × 5K — Est. 2025</div>
+    </div>
+    <div style="position:relative;z-index:2;max-width:24ch;margin:clamp(40px,8vh,96px) 0">
+      <p data-parallax="0.05" style="margin:0;font-weight:700;font-size:clamp(28px,4.8vw,68px);line-height:1.02;letter-spacing:-.035em;animation:hvRise 1s .35s both">An old European city of stone, moss, and mist.</p>
+    </div>
+    <div style="position:relative;z-index:2;display:flex;align-items:flex-end;justify-content:space-between;gap:24px">
+      <h1 data-hero-mark style="margin:0;font-weight:700;font-size:clamp(76px,20vw,380px);line-height:.86;letter-spacing:-.05em;will-change:transform,opacity;padding-bottom:.06em">Havelle</h1>
+      <span data-parallax="0.2" style="font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;opacity:.5;white-space:nowrap;padding-bottom:10px;animation:hvRise .9s .5s both">Scroll ↓</span>
     </div>
   </section>
 
-  <!-- ABOUT -->
-  <section id="about-havelle" class="reveal" data-parallax data-speed="0.04">
-    <div class="wrap stack">
-      <h2>About Havelle</h2>
-      <p class="lead">Havelle is the newest addition to Compbuild’s projects, arriving <b>April 17, 2025</b>. It showcases a side of <b>Compbuild Textures</b> with extraordinary potential — emphasizing traditional architecture and historic urban fabric.</p>
-      <p class="lead">Inspired primarily by the <b>British Isles</b> and <b>Northwest Europe</b> (but not limited to them), Havelle puts <b>architecture first</b>. The natural landscape is intentionally understated (though beautiful) — expect a <b>dense city</b> covering most of the current map.</p>
-      <p class="lead">Because the terrain is gorgeous on its own, we’ll also release a <b>world download of the landscape</b> separately — stay tuned.</p>
+  <!-- lore quote -->
+  <section style="position:relative;padding:clamp(64px,13vh,170px) clamp(20px,4vw,56px);border-top:1px solid var(--line,rgba(11,11,11,.14));transition:border-color .6s ease;overflow:hidden">
+    <div aria-hidden="true" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-weight:800;font-size:clamp(180px,34vw,460px);line-height:1;opacity:.05;pointer-events:none;background:linear-gradient(115deg,#9e1414,#cc2424,#e56a6a);-webkit-background-clip:text;background-clip:text;color:transparent">“</div>
+    <blockquote data-reveal style="position:relative;z-index:2;margin:0 auto;max-width:24ch;text-align:center;font-weight:600;font-size:clamp(22px,3.4vw,46px);line-height:1.28;letter-spacing:-.02em">Stone now doth stand where reeds once grew, yet the mist clings like a mantle, and the river's song still calleth.</blockquote>
+    <div data-reveal data-reveal-delay="160" style="position:relative;z-index:2;margin:clamp(28px,5vh,48px) auto 0;text-align:center;font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;background:linear-gradient(115deg,#9e1414,#cc2424,#e56a6a);-webkit-background-clip:text;background-clip:text;color:transparent">Begotten of bog and marsh</div>
+  </section>
+
+  <!-- build image -->
+  <section style="padding:0 clamp(20px,4vw,56px) clamp(48px,9vh,110px);border-top:1px solid var(--line,rgba(11,11,11,.14));transition:border-color .6s ease;padding-top:clamp(48px,9vh,110px)">
+    <div data-parallax-img style="position:relative;height:clamp(300px,68vh,680px);overflow:hidden;border:1px solid var(--line,rgba(11,11,11,.14));transition:border-color .6s ease">
+      <div data-pimg style="position:absolute;inset:-12% 0;background:#10140e;will-change:transform"><img src="assets/world-havelle.webp" alt="Havelle — traditional European streets" style="width:100%;height:100%;object-fit:cover;display:block"/></div>
+      <span style="position:absolute;left:18px;bottom:16px;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#fff;z-index:2;text-shadow:0 1px 4px rgba(0,0,0,.6)">Havelle — traditional streets</span>
+      <span style="position:absolute;right:18px;top:16px;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#fff;z-index:2;text-shadow:0 1px 4px rgba(0,0,0,.6)">Fig. 01</span>
     </div>
   </section>
 
-  <!-- FEATURES with tilt -->
-  <section id="features" class="reveal" data-parallax data-speed="0.03">
-    <div class="wrap stack">
-      <h2>Features</h2>
-      <div class="features">
-        <div class="feature" data-tilt>
-          <h3>Custom trees (first-time)</h3>
-          <p class="lead">Debut of Compbuild Textures’ bespoke branch & log system for richer streets, greens, and courtyards.</p>
-        </div>
-        <div class="feature" data-tilt>
-          <h3>Traditional architecture focus</h3>
-          <p class="lead">New traditional blocks elevate classic European forms — masonry, slate, timber, and narrow streets.</p>
-        </div>
-        <div class="feature" data-tilt>
-          <h3>A new style for Compbuild</h3>
-          <p class="lead">Our first full EU-style map — roads, signage, and structural assets built to European conventions.</p>
-        </div>
+  <!-- reading reveal intro -->
+  <section data-read-wrap style="position:relative;height:230vh;border-top:1px solid var(--line,rgba(11,11,11,.14));transition:border-color .6s ease">
+    <div style="position:sticky;top:0;height:100vh;display:flex;align-items:center;padding:0 clamp(20px,6vw,110px)">
+      <div style="max-width:1100px">
+        <div style="font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;background:linear-gradient(115deg,#9e1414,#cc2424,#e56a6a);-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:clamp(24px,4vh,46px)">Overview</div>
+        <p data-read style="margin:0;font-weight:500;font-size:clamp(24px,3.9vw,54px);line-height:1.18;letter-spacing:-.02em">Havelle is inspired by the British Isles and Northwest Europe. Unlike our other maps, the focus is almost entirely architectural — most of the territory is dense, traditional city, built to show off the pack's traditional blocks.</p>
       </div>
     </div>
   </section>
 
-  <!-- STATUS / VISIT -->
-  <section id="status" class="reveal" data-parallax data-speed="0.02">
-    <div class="wrap stack">
-      <h2>Now available on the server</h2>
-      <p class="lead">Havelle is live — showcasing the full potential of our architectural blocks and newest flora features. It’s also our sandbox for trying new styles with <b>Compbuild Textures</b>.</p>
-      <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center">
-        <span class="btn" data-copy="PLAY.COMPBUILDREDUX.NET" title="Copy server IP">IP: PLAY.COMPBUILDREDUX.NET</span>
-        <a class="btn arrow" href="https://discord.gg/compbuildredux" target="_blank" rel="noopener">Discord Updates</a>
+  <!-- features -->
+  <section style="padding:clamp(54px,9vh,120px) clamp(20px,4vw,56px);border-top:1px solid var(--line,rgba(11,11,11,.14));transition:border-color .6s ease">
+    <div style="display:flex;align-items:baseline;justify-content:space-between;gap:20px;margin-bottom:clamp(34px,6vh,72px);flex-wrap:wrap">
+      <h2 data-split data-grad style="margin:0;font-weight:700;font-size:clamp(32px,5vw,72px);letter-spacing:-.035em;line-height:.96">What makes it new</h2>
+      <span style="font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;opacity:.5">Firsts for Compbuild</span>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:clamp(28px,5vw,80px)">
+      <div data-reveal style="flex:1;min-width:230px">
+        <div style="font-size:12px;font-weight:700;opacity:.4">01</div>
+        <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--line,rgba(11,11,11,.14));font-weight:700;font-size:clamp(20px,2.2vw,28px);letter-spacing:-.02em;background:linear-gradient(115deg,#9e1414,#cc2424,#e56a6a);-webkit-background-clip:text;background-clip:text;color:transparent">Custom trees</div>
+        <p style="margin:14px 0 0;font-size:15px;line-height:1.55;opacity:.62">The first map to use Compbuild Textures' purpose-built trees, made for the pack's custom branch and log features.</p>
+      </div>
+      <div data-reveal data-reveal-delay="100" style="flex:1;min-width:230px">
+        <div style="font-size:12px;font-weight:700;opacity:.4">02</div>
+        <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--line,rgba(11,11,11,.14));font-weight:700;font-size:clamp(20px,2.2vw,28px);letter-spacing:-.02em;background:linear-gradient(115deg,#9e1414,#cc2424,#e56a6a);-webkit-background-clip:text;background-clip:text;color:transparent">Traditional architecture</div>
+        <p style="margin:14px 0 0;font-size:15px;line-height:1.55;opacity:.62">Built around the pack's growing library of traditional blocks, which take period builds to a whole new level.</p>
+      </div>
+      <div data-reveal data-reveal-delay="200" style="flex:1;min-width:230px">
+        <div style="font-size:12px;font-weight:700;opacity:.4">03</div>
+        <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--line,rgba(11,11,11,.14));font-weight:700;font-size:clamp(20px,2.2vw,28px);letter-spacing:-.02em;background:linear-gradient(115deg,#9e1414,#cc2424,#e56a6a);-webkit-background-clip:text;background-clip:text;color:transparent">A new EU style</div>
+        <p style="margin:14px 0 0;font-size:15px;line-height:1.55;opacity:.62">Our first full European map — a fresh visual language of roads, structural assets, and city form for Compbuild.</p>
       </div>
     </div>
   </section>
 
-  <!-- CTA -->
-  <section id="cta" class="reveal">
-    <div class="wrap stack">
-      <h2>Help shape Havelle</h2>
-      <p class="lead">Bring references and an eye for tradition — we’ll bring the textures. Join the community builds and contribute to the city’s stone‑and‑moss character.</p>
-      <div style="display:flex; gap:10px; flex-wrap:wrap">
-        <a class="btn arrow" href="https://discord.gg/compbuildredux" target="_blank" rel="noopener">Join Discord</a>
-        <span class="btn" data-copy="PLAY.COMPBUILDREDUX.NET" title="Copy server IP">IP: PLAY.COMPBUILDREDUX.NET</span>
-      </div>
+  <!-- stats -->
+  <section style="padding:clamp(54px,9vh,120px) clamp(20px,4vw,56px);border-top:1px solid var(--line,rgba(11,11,11,.14));transition:border-color .6s ease">
+    <div style="display:flex;flex-wrap:wrap;gap:clamp(28px,5vw,80px)">
+      <div data-statcol style="flex:1;min-width:150px"><div style="font-weight:800;font-size:clamp(40px,6vw,84px);letter-spacing:-.03em;line-height:.95"><span data-count="5" data-suffix="K" style="background:linear-gradient(115deg,#9e1414,#cc2424,#e56a6a);-webkit-background-clip:text;background-clip:text;color:transparent">0</span></div><div style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;opacity:.5;margin-top:14px;padding-top:14px;border-top:1px solid var(--line,rgba(11,11,11,.14))">Blocks per edge</div></div>
+      <div data-statcol style="flex:1;min-width:150px"><div style="font-weight:800;font-size:clamp(40px,6vw,84px);letter-spacing:-.03em;line-height:.95"><span data-count="2025" style="background:linear-gradient(115deg,#9e1414,#cc2424,#e56a6a);-webkit-background-clip:text;background-clip:text;color:transparent">0</span></div><div style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;opacity:.5;margin-top:14px;padding-top:14px;border-top:1px solid var(--line,rgba(11,11,11,.14))">Established</div></div>
+      <div data-statcol style="flex:1;min-width:150px"><div style="font-weight:800;font-size:clamp(40px,6vw,84px);letter-spacing:-.03em;line-height:.95">1st</div><div style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;opacity:.5;margin-top:14px;padding-top:14px;border-top:1px solid var(--line,rgba(11,11,11,.14))">Full European map</div></div>
+      <div data-statcol style="flex:1;min-width:150px"><div style="font-weight:800;font-size:clamp(40px,6vw,84px);letter-spacing:-.03em;line-height:.95">EU</div><div style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;opacity:.5;margin-top:14px;padding-top:14px;border-top:1px solid var(--line,rgba(11,11,11,.14))">British Isles &amp; NW</div></div>
     </div>
   </section>
 
-  <footer class="wrap">
-    <div class="stack muted">©2025 COMPBUILD REDUX — Not an official Minecraft service. Not affiliated with Mojang or Microsoft.</div>
+  <!-- footer -->
+  <footer style="background:var(--fg,#0b0b0b);color:var(--bg,#fff);padding:clamp(64px,12vh,150px) clamp(20px,4vw,56px) clamp(32px,5vh,52px);transition:background-color .6s ease,color .6s ease;overflow:hidden">
+    <div style="font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;opacity:.55;margin-bottom:26px">Next</div>
+    <a href="index.html#worlds" data-split-foot style="display:block;text-decoration:none;margin:0 0 clamp(34px,6vh,64px);font-weight:700;font-size:clamp(48px,11vw,200px);line-height:.82;letter-spacing:-.05em;background:linear-gradient(115deg,#cc2424,#e56a6a,#cc2424,#e56a6a,#cc2424);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent">Back to projects →</a>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;padding-top:24px;border-top:1px solid rgba(255,255,255,.18);font-size:12px;font-weight:500;opacity:.55">
+      <span>© 2026 Compbuild Studios — Havelle</span>
+      <span style="letter-spacing:.08em;text-transform:uppercase">European · Stone &amp; Moss</span>
+    </div>
   </footer>
+</div>
+<script>
+// Lightweight standalone runtime: the design's component logic is pure DOM code,
+// so we keep it verbatim and provide a minimal base class + bootstrap in place of
+// the original Design Component (React) runtime.
+class DCLogic { constructor(props){ this.props = props || {}; } }
 
-  <script>
-    // Theme toggle + persist
-    const root = document.documentElement;
-    const toggle = document.getElementById('themeToggle');
-    const saved = localStorage.getItem('theme');
-    if(saved){ root.setAttribute('data-theme', saved); }
-    toggle?.addEventListener('click', () => {
-      const cur = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-      root.setAttribute('data-theme', cur);
-      localStorage.setItem('theme', cur);
-    });
-
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    // Reveal on view
-    const io = new IntersectionObserver((entries)=>{
-      entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} })
-    }, {threshold: 0.12});
-    document.querySelectorAll('.reveal').forEach((el,i)=>{ el.style.transitionDelay = (i*40)+'ms'; io.observe(el); });
-
-    // Parallax engine
-    const parallaxNodes = prefersReduced ? [] : Array.from(document.querySelectorAll('[data-parallax]'));
-    let lastY = window.scrollY;
-    const tick = ()=>{
-      const y = window.scrollY;
-      if(Math.abs(y-lastY) > 0.2){
-        const vh = innerHeight;
-        parallaxNodes.forEach(n=>{
-          const speed = parseFloat(n.getAttribute('data-speed')||0);
-          const r = n.getBoundingClientRect();
-          if(r.top < vh*1.2 && r.bottom > -vh*0.2){
-            const offset = (y + r.top + r.height*0.5) * speed * -0.12;
-            n.style.transform = `translate3d(0, ${offset.toFixed(2)}px, 0)`;
-          }
-        });
-        lastY = y;
-      }
-      requestAnimationFrame(tick);
+class Component extends DCLogic {
+  constructor(props){
+    super(props);
+    this.mode = String(props.startMode || 'Light').toLowerCase() === 'dark' ? 'dark' : 'light';
+  }
+  themes(){
+    return {
+      light: {'--bg':'#ffffff','--fg':'#0b0b0b','--muted':'#8a8a8a','--line':'rgba(11,11,11,0.14)'},
+      dark:  {'--bg':'#0a0a0a','--fg':'#fafafa','--muted':'#8a8a8a','--line':'rgba(255,255,255,0.15)'}
     };
-    if(!prefersReduced) requestAnimationFrame(tick);
-
-    // Extra: hero BG parallax variable
-    const hero = document.querySelector('.hero');
-    const bg = document.querySelector('.hero .bg');
-    addEventListener('scroll', () => {
-      const r = hero.getBoundingClientRect();
-      const progress = Math.min(1, Math.max(0, ( -r.top ) / (r.height || 1)));
-      bg.style.setProperty('--y', (progress * -40) + 'px');
-    }, {passive:true});
-
-    // Card tilt
-    document.querySelectorAll('[data-tilt]').forEach(card=>{
-      card.addEventListener('pointermove', (e)=>{
-        const b = card.getBoundingClientRect();
-        const cx = (e.clientX - b.left) / b.width - 0.5;
-        const cy = (e.clientY - b.top) / b.height - 0.5;
-        card.style.transform = `perspective(900px) rotateX(${cy*-2}deg) rotateY(${cx*2}deg)`;
-      });
-      card.addEventListener('pointerleave', ()=>{ card.style.transform='none'; });
+  }
+  applyTheme(mode){
+    if(!this.root) return;
+    const t = this.themes()[mode];
+    Object.keys(t).forEach(k => this.root.style.setProperty(k, t[k]));
+    const logo = this.root.querySelector('[data-logo]');
+    if(logo) logo.style.filter = mode === 'dark' ? 'invert(1)' : 'none';
+  }
+  toggleTheme(){
+    this.mode = this.mode === 'dark' ? 'light' : 'dark';
+    this.applyTheme(this.mode);
+    try { localStorage.setItem('hv-theme', this.mode); } catch(e){}
+  }
+  clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
+  splitLetters(el){
+    const frag = document.createDocumentFragment();
+    const spans = [];
+    Array.prototype.forEach.call(el.childNodes, node=>{
+      if(node.nodeType === 3){
+        node.textContent.split('').forEach(ch=>{
+          if(ch === ' '){ frag.appendChild(document.createTextNode('\u00A0')); return; }
+          const s = document.createElement('span');
+          s.textContent = ch; s.style.display = 'inline-block'; s.style.willChange = 'transform,opacity';
+          spans.push(s); frag.appendChild(s);
+        });
+      } else { frag.appendChild(node.cloneNode(true)); }
     });
+    el.innerHTML = ''; el.appendChild(frag);
+    return spans;
+  }
+  hideSplit(spans){ spans.forEach(s=>{ s.style.opacity='0'; s.style.transform='translateY(1em)'; s.style.transformOrigin='50% 100%'; }); }
+  revealSplit(spans){ spans.forEach((s,i)=>{ s.style.transition='transform 1s cubic-bezier(.16,.9,.24,1), opacity .55s ease'; s.style.transitionDelay=(i*30)+'ms'; requestAnimationFrame(()=>{ s.style.transform='translateY(0)'; s.style.opacity='1'; }); }); }
+  applyGrad(spans){ spans.forEach(s=>{ s.style.backgroundImage='linear-gradient(115deg,#9e1414,#cc2424,#e56a6a)'; s.style.webkitBackgroundClip='text'; s.style.backgroundClip='text'; s.style.color='transparent'; }); }
+  primeReveal(el){ el.style.willChange='opacity,transform'; el.style.transition='opacity .9s cubic-bezier(.2,.7,.2,1), transform 1.05s cubic-bezier(.16,.9,.24,1)'; el.style.opacity='0'; el.style.transform='translateY(42px)'; }
+  fireReveal(el){ el.style.opacity='1'; el.style.transform='none'; }
+  countUp(el){
+    const target = parseFloat(el.getAttribute('data-count'));
+    const suf = el.getAttribute('data-suffix') || '';
+    const dur = 1200, t0 = performance.now();
+    const step = (t)=>{ const p=Math.min(1,(t-t0)/dur); const e=1-Math.pow(1-p,3); el.textContent=Math.round(target*e)+suf; if(p<1) requestAnimationFrame(step); };
+    requestAnimationFrame(step);
+  }
+  scrubCount(el,e){ const t=parseFloat(el.getAttribute('data-count')); const suf=el.getAttribute('data-suffix')||''; const dec=parseInt(el.getAttribute('data-dec')||'0',10); const v=t*e; el.textContent=(dec>0?v.toFixed(dec):Math.round(v))+suf; }
+  driveStats(vh){ if(!this.statcols||!this.statcols.length) return; for(const c of this.statcols){ const r=c.getBoundingClientRect(); const local=this.reduce?1:this.clamp((vh*0.9 - r.top)/(vh*0.42),0,1); const e=local*local*(3-2*local); c.style.opacity=String(0.12+e*0.88); c.style.transform='translateY('+((1-e)*56)+'px)'; const cnt=c.querySelector('[data-count]'); if(cnt) this.scrubCount(cnt,e); } }
+  componentDidMount(){
+    this.root = document.querySelector('[data-hv="HAVELLE"]');
+    if(!this.root) return;
+    let saved=null; try { saved=localStorage.getItem('hv-theme'); } catch(e){}
+    if(saved==='dark'||saved==='light') this.mode=saved;
+    this.applyTheme(this.mode);
+    this.reduce = !!this.props.reduceMotion || (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
 
-    // Copy helpers
-    function copyText(str){
-      if(!str) return;
-      navigator.clipboard.writeText(str).catch(()=>{
-        const ta = document.createElement('textarea'); ta.value = str; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
-      });
+    const hero = this.root.querySelector('[data-hero-mark]');
+    if(hero){ const spans=this.splitLetters(hero); if(this.reduce){spans.forEach(s=>s.style.opacity='1');} else { this.hideSplit(spans); setTimeout(()=>this.revealSplit(spans),140); } }
+
+    this.revealEl = (el)=>{ if(el._revealed) return; el._revealed=true; if(el.hasAttribute('data-split') && el._spans){ this.revealSplit(el._spans); } else if(el.hasAttribute('data-count')){ this.countUp(el); } else { this.fireReveal(el); } };
+    this.revealables = [];
+    const io = new IntersectionObserver((entries)=>{ entries.forEach(e=>{ if(e.isIntersecting){ this.revealEl(e.target); io.unobserve(e.target); } }); }, { threshold:0.15, rootMargin:'0px 0px -6% 0px' });
+    this.root.querySelectorAll('[data-split]').forEach(el=>{ const spans=this.splitLetters(el); el._spans=spans; if(el.hasAttribute('data-grad')) this.applyGrad(spans); if(this.reduce){spans.forEach(s=>s.style.opacity='1');el._revealed=true;} else { this.hideSplit(spans); this.revealables.push(el); io.observe(el);} });
+    this.root.querySelectorAll('[data-reveal]').forEach(el=>{ if(this.reduce){el.style.opacity='1';el.style.transform='none';el._revealed=true;return;} this.primeReveal(el); const d=el.getAttribute('data-reveal-delay'); if(d) el.style.transitionDelay=parseInt(d,10)+'ms'; this.revealables.push(el); io.observe(el); });
+    this.root.querySelectorAll('[data-count]').forEach(el=>{ if(el.closest('[data-statcol]')) return; if(this.reduce){ el.textContent=el.getAttribute('data-count')+(el.getAttribute('data-suffix')||''); el._revealed=true; return; } this.revealables.push(el); io.observe(el); });
+    this.statcols = Array.prototype.slice.call(this.root.querySelectorAll('[data-statcol]'));
+    this.statcols.forEach(c=>{ c.style.willChange='opacity,transform'; if(!this.reduce){ c.style.opacity='0'; c.style.transform='translateY(56px)'; } });
+
+    const read = this.root.querySelector('[data-read]');
+    if(read){ const text=read.textContent.trim(); read.textContent=''; this.readWords=[]; text.split(/\s+/).forEach(w=>{ const s=document.createElement('span'); s.textContent=w+' '; s.style.color='var(--muted)'; s.style.transition='color .25s ease'; read.appendChild(s); this.readWords.push(s); }); }
+
+    this.onScroll = ()=>{ if(this._raf) return; this._raf=requestAnimationFrame(()=>{ this._raf=null; this.tick(); }); };
+    window.addEventListener('scroll', this.onScroll, { passive:true });
+    window.addEventListener('resize', this.onScroll);
+    this.tick();
+  }
+  componentWillUnmount(){ window.removeEventListener('scroll', this.onScroll); window.removeEventListener('resize', this.onScroll); }
+  tick(){
+    if(!this.root) return;
+    const vh = window.innerHeight;
+    const sy = window.scrollY || window.pageYOffset || 0;
+    const prog = this.root.querySelector('[data-prog]');
+    if(prog){ const max=document.documentElement.scrollHeight-vh; prog.style.transform='scaleX('+this.clamp(max>0?sy/max:0,0,1)+')'; }
+    const nav = this.root.querySelector('[data-nav]');
+    if(nav) nav.style.borderBottomColor = sy>12 ? 'var(--line)' : 'transparent';
+    if(!this.reduce){
+      const hm=this.root.querySelector('[data-hero-mark]');
+      if(hm){ const p=this.clamp(sy/vh,0,1); hm.style.transform='translate3d(0,0,0)'; hm.style.opacity=String(1-p*0.6); }
+      this.root.querySelectorAll('[data-parallax]').forEach(el=>{ const sp=parseFloat(el.getAttribute('data-parallax')); el.style.transform='translate3d(0,'+(sy*sp)+'px,0)'; });
+      const pimg=this.root.querySelector('[data-pimg]');
+      if(pimg){ const r=pimg.parentElement.getBoundingClientRect(); const center=(r.top+r.height/2)-vh/2; pimg.style.transform='translate3d(0,'+(center*0.12)+'px,0)'; }
     }
-    document.querySelectorAll('[data-copy]').forEach(btn=> btn.addEventListener('click', ()=> copyText(btn.getAttribute('data-copy'))));
-  </script>
+    const wrap=this.root.querySelector('[data-read-wrap]');
+    if(wrap && this.readWords){ const r=wrap.getBoundingClientRect(); const total=wrap.offsetHeight-vh; const p=this.clamp((-r.top)/(total||1),0,1); const n=Math.floor(p*this.readWords.length*1.18); for(let i=0;i<this.readWords.length;i++){ this.readWords[i].style.color = i<n ? 'var(--fg)' : 'var(--muted)'; } }
+    this.driveStats(vh);
+    if(this.revealables && this.revealables.length){ const m=vh*0.86; for(let i=this.revealables.length-1;i>=0;i--){ const el=this.revealables[i]; if(el._revealed){ this.revealables.splice(i,1); continue; } if(el.getBoundingClientRect().top < m){ this.revealEl(el); this.revealables.splice(i,1); } } }
+  }
+  renderVals(){ return { toggleTheme: () => this.toggleTheme() }; }
+}
+
+(function(){
+  function boot(){
+    var comp = new Component({ startMode: 'Light', reduceMotion: false });
+    var vals = (typeof comp.renderVals === 'function') ? (comp.renderVals() || {}) : {};
+    if (typeof comp.componentDidMount === 'function') comp.componentDidMount();
+    var nodes = document.querySelectorAll('[data-action]');
+    for (var i = 0; i < nodes.length; i++) {
+      (function(el){
+        var fn = vals[el.getAttribute('data-action')];
+        if (typeof fn === 'function') el.addEventListener('click', fn);
+      })(nodes[i]);
+    }
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+</script>
 </body>
 </html>
