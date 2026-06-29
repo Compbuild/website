@@ -1,166 +1,703 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Compbuild Creative — Pushing the Boundaries</title>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Manrope', sans-serif; }
-    body { background: #fff; color: #000; overflow-x: hidden; scroll-behavior: smooth; }
-
-    header { display: flex; justify-content: space-between; align-items: center; padding: 24px 60px; font-size: 15px; font-weight: 600; position: sticky; top: 0; background: #fff; z-index: 10; box-shadow: 0 2px 10px rgba(0,0,0,0.03); }
-    header img { height: 32px; }
-    nav a { margin: 0 20px; text-decoration: none; color: #000; transition: opacity 0.2s; }
-    nav a:hover { opacity: 0.6; }
-    .cta { font-weight: 700; text-decoration: none; color: #000; border-bottom: 1px solid #000; padding-bottom: 2px; }
-
-    section { padding: 100px 60px; min-height: 100vh; display: flex; align-items: center; justify-content: center; flex-direction: column; text-align: center; opacity: 0; transform: translateY(40px); transition: opacity 0.9s ease, transform 0.9s ease; }
-    section.visible { opacity: 1; transform: translateY(0); }
-
-    h1, h2 { font-weight: 800; line-height: 1.1; letter-spacing: -1px; }
-    h1 { font-size: clamp(48px, 6vw, 90px); }
-    h2 { font-size: clamp(36px, 5vw, 64px); margin-bottom: 20px; }
-    p { font-size: 16px; color: #333; line-height: 1.7; max-width: 720px; margin-top: 20px; }
-
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; text-align: left; }
-    .grid img { width: 100%; border-radius: 6px; }
-
-    .button { background: none; border: 1.5px solid #000; padding: 12px 26px; font-size: 15px; border-radius: 24px; font-weight: 600; cursor: pointer; margin-top: 30px; transition: background 0.3s, color 0.3s; text-decoration: none; color: #000; display: inline-block; }
-    .button:hover { background: #000; color: #fff; }
-
-    footer { text-align: center; font-size: 13px; color: #555; padding: 40px 60px; border-top: 1px solid rgba(0,0,0,0.1); }
-
-    .features { text-align: left; list-style: none; margin-top: 20px; }
-    .features li { margin-top: 8px; font-size: 15px; }
-
-    .texture-gallery { width: 100%; margin-top: 60px; text-align: left; }
-    .texture-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 20px; }
-    .texture-header h2 { font-size: 48px; font-weight: 800; }
-    .texture-header .nav { font-size: 20px; user-select: none; }
-
-    .texture-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
-    .texture-item p { font-size: 14px; font-weight: 600; margin-bottom: 10px; color: #000; }
-    .texture-item img { width: 100%; border-radius: 8px; height: 600px; object-fit: cover; box-shadow: 0 5px 20px rgba(0,0,0,0.08); transition: transform 0.4s ease; }
-    .texture-item img:hover { transform: scale(1.02); }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Compbuild — Creative building studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  html{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  body{margin:0}
+  ::selection{background:var(--fg,#0b0b0b);color:var(--bg,#fff)}
+  @keyframes cbRise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes cbGrad{0%{background-position:0% 50%}100%{background-position:200% 50%}}
+  @keyframes cbLdLeft{0%{opacity:0;transform:scale(.66)}55%{opacity:1}100%{opacity:1;transform:scale(1)}}
+  @keyframes cbLdReveal{0%{clip-path:inset(0 100% 0 0);opacity:.2}100%{clip-path:inset(0 0 0 0);opacity:1}}
+  @keyframes cbLdWord{0%{opacity:0;transform:translateY(16px);letter-spacing:.34em}100%{opacity:1;transform:translateY(0);letter-spacing:-.01em}}
+  @keyframes cbLdBar{0%{transform:scaleX(0)}100%{transform:scaleX(1)}}
+  @keyframes cbLdCenterOut{0%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1.07)}}
+  @keyframes cbLdTop{0%{transform:translateY(0)}100%{transform:translateY(-101%)}}
+  @keyframes cbLdBot{0%{transform:translateY(0)}100%{transform:translateY(101%)}}
+  @keyframes cbLdUnblock{to{pointer-events:none;visibility:hidden}}
+</style>
 </head>
 <body>
-  <header>
-    <div><img src="black.png" alt="Compbuild Logo"></div>
-    <nav>
-      <a href="#home">Home</a>
-      <a href="#projects">Projects</a>
-      <a href="#textures">Textures</a>
-      <a href="#join">Join</a>
-    </nav>
-    <a href="#join" class="cta">Join Us →</a>
-  </header>
+<div data-cb="ONE" style="font-family:Manrope,system-ui,sans-serif;background:var(--bg,#ffffff);color:var(--fg,#0b0b0b);transition:background-color .6s ease,color .6s ease;overflow-x:hidden">
 
-  <!-- Section 1: Hero -->
-  <section id="home">
-    <h1>PUSHING THE<br>BOUNDARIES.<br>OF MINECRAFT.</h1>
-    <p>Compbuild is a creative community founded in 2017. Our goal is to create creative expression through Minecraft as well as to push the boundaries with every project we take.</p>
+  <!-- intro loader -->
+  <div data-loader style="position:fixed;inset:0;z-index:9999;pointer-events:auto;animation:cbLdUnblock 0s 6.7s forwards">
+    <div style="position:absolute;top:0;left:0;right:0;height:50.5%;background:var(--bg,#fff);animation:cbLdTop 1.2s 5.7s cubic-bezier(.76,0,.24,1) both"></div>
+    <div style="position:absolute;bottom:0;left:0;right:0;height:50.5%;background:var(--bg,#fff);animation:cbLdBot 1.2s 5.7s cubic-bezier(.76,0,.24,1) both"></div>
+    <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;animation:cbLdCenterOut 1s 5.4s forwards">
+      <img data-loader-logo src="assets/logo.png" alt="Compbuild" style="width:clamp(150px,20vw,240px);height:auto;display:block;animation:cbLdReveal 4s .6s cubic-bezier(.22,.9,.26,1) both"/>
+    </div>
+  </div>
+
+  <!-- scroll progress -->
+  <div style="position:fixed;top:0;left:0;right:0;height:2px;z-index:140;background:transparent"><div data-prog style="height:100%;width:100%;transform:scaleX(0);transform-origin:0 50%;background:var(--fg,#0b0b0b);transition:background-color .6s ease"></div></div>
+
+  <!-- custom cursor + project preview -->
+  <div data-cursor style="position:fixed;top:0;left:0;z-index:135;width:22px;height:22px;border:1.5px solid #fff;border-radius:50%;pointer-events:none;opacity:0;transform:translate(-50%,-50%);mix-blend-mode:difference;will-change:transform,width,height;transition:width .28s cubic-bezier(.2,.8,.2,1),height .28s cubic-bezier(.2,.8,.2,1),opacity .3s ease"></div>
+  <div data-preview style="position:fixed;top:0;left:0;z-index:90;width:320px;height:200px;pointer-events:none;opacity:0;transform:translate(-50%,-50%) scale(.82);transition:opacity .4s ease,transform .5s cubic-bezier(.2,.8,.2,1);will-change:transform,opacity">
+    <div style="position:absolute;inset:0;overflow:hidden;background:#111;display:flex;align-items:flex-end;padding:14px;box-shadow:0 24px 60px rgba(0,0,0,.28)">
+      <img data-preview-img src="assets/world-alaire.webp" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block"/>
+      <span data-preview-label style="position:relative;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#fff;text-shadow:0 1px 5px rgba(0,0,0,.7)">Alaire</span>
+    </div>
+  </div>
+
+  <!-- nav -->
+  <nav data-nav style="position:fixed;top:0;left:0;right:0;z-index:110;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:16px clamp(20px,4vw,56px);background:color-mix(in srgb,var(--bg,#fff) 78%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid transparent;transition:background-color .6s ease,border-color .35s ease">
+    <a href="#top" data-hover style="display:flex;align-items:center;gap:11px;text-decoration:none;color:var(--fg,#0b0b0b)">
+      <img data-logo src="assets/logo.png" alt="Compbuild" style="height:22px;width:auto;display:block"/>
+      <span style="font-weight:700;font-size:16px;letter-spacing:-.01em">Compbuild</span>
+    </a>
+    <div style="display:flex;align-items:center;gap:clamp(16px,2.4vw,34px)">
+      <a href="#studio" data-hover style="text-decoration:none;color:var(--fg,#0b0b0b);font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;opacity:.6">Studio</a>
+      <a href="#worlds" data-hover style="text-decoration:none;color:var(--fg,#0b0b0b);font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;opacity:.6">Worlds</a>
+      <a href="#textures" data-hover style="text-decoration:none;color:var(--fg,#0b0b0b);font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;opacity:.6">Textures</a>
+      <a href="#support" data-hover style="text-decoration:none;color:var(--fg,#0b0b0b);font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;opacity:.6">Support</a>
+      <a href="https://discord.gg/Kw7stMa" target="_blank" rel="noopener" data-hover style="text-decoration:none;color:var(--fg,#0b0b0b);font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;opacity:.6">Discord</a>
+      <button data-hover data-action="copyIp" style="cursor:none;display:flex;align-items:center;gap:9px;padding:8px 13px;border:1px solid var(--line,rgba(11,11,11,.16));border-radius:999px;background:transparent;color:var(--fg,#0b0b0b);font-family:inherit;font-size:12px;font-weight:600;letter-spacing:.02em;transition:border-color .3s ease">
+        <span style="width:6px;height:6px;border-radius:50%;background:var(--fg,#0b0b0b)"></span>
+        <span data-ip-label>play.compbuild.net</span>
+      </button>
+      <button data-hover data-action="toggleTheme" aria-label="Toggle theme" style="cursor:none;width:34px;height:34px;display:flex;align-items:center;justify-content:center;border:1px solid var(--line,rgba(11,11,11,.16));border-radius:999px;background:transparent;color:var(--fg,#0b0b0b);transition:border-color .3s ease">
+        <span style="width:13px;height:13px;border-radius:999px;border:1.5px solid var(--fg,#0b0b0b);background:linear-gradient(90deg,var(--fg,#0b0b0b) 0 50%,transparent 50% 100%)"></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- hero -->
+  <section id="top" style="position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:space-between;padding:clamp(98px,14vh,152px) clamp(20px,4vw,56px) clamp(28px,4vh,50px);overflow:hidden">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;padding-bottom:clamp(22px,3.5vh,38px);border-bottom:1px solid var(--line,rgba(11,11,11,.14))">
+      <div data-parallax="0.04" style="font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;opacity:.55;animation:cbRise .9s .1s both">Creative building studio</div>
+      <div data-parallax="0.08" style="font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;opacity:.55;text-align:center;animation:cbRise .9s .2s both">Realistic worlds, in Minecraft</div>
+      <div data-parallax="0.12" style="font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;opacity:.55;text-align:right;animation:cbRise .9s .3s both">Est. 2017 — Worldwide</div>
+    </div>
+
+    <div style="max-width:22ch;margin:clamp(40px,8vh,96px) 0">
+      <p data-parallax="0.05" style="margin:0;font-weight:700;font-size:clamp(28px,4.8vw,68px);line-height:1.02;letter-spacing:-.035em;animation:cbRise 1s .35s both">We craft realistic builds, meant to last.</p>
+    </div>
+
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px">
+      <h1 data-hero-mark style="margin:0;font-weight:700;font-size:clamp(64px,16.5vw,290px);line-height:.78;letter-spacing:-.05em;will-change:transform,opacity;padding-bottom:.06em">Compbuild</h1>
+      <span data-parallax="0.2" style="font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;opacity:.5;white-space:nowrap;padding-bottom:10px;animation:cbRise .9s .5s both">Scroll ↓</span>
+    </div>
   </section>
 
-  <!-- Section 2: Projects -->
-  <section id="projects">
-    <h2>WE DON'T TAKE THE TRADITIONAL ROUTE.</h2>
-    <p>“A bustling North American metropolis with sights of magnificent architecture.”</p>
-
-    <div class="grid" style="margin-top: 60px;">
-      <div>
-        <h2>Alaire</h2>
-        <p>A modern cityscape that captures the blend of scale and style Compbuild is known for.</p>
+  <!-- welcome: animated two-piece logo -->
+  <section data-logo-build style="position:relative;height:130vh;border-top:1px solid var(--line,rgba(11,11,11,.14));transition:border-color .6s ease">
+    <div style="position:sticky;top:0;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:clamp(26px,4vh,48px);padding:0 24px">
+      <div style="font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;opacity:.5">Welcome</div>
+      <svg viewBox="0 0 800 800" style="width:clamp(150px,24vw,310px);height:auto;display:block;overflow:hidden">
+        <rect data-logo-right x="535" y="130" width="140" height="540" fill="var(--fg,#0b0b0b)" style="transform:translateX(-335px);transition:transform 1.15s cubic-bezier(.16,.9,.24,1)"></rect>
+        <rect x="0" y="0" width="400" height="800" fill="var(--fg,#0b0b0b)"></rect>
+        <rect x="130" y="130" width="145" height="540" fill="var(--bg,#ffffff)"></rect>
+      </svg>
+      <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1);max-width:660px">
+        <h2 style="margin:0;font-weight:700;font-size:clamp(34px,5.6vw,82px);letter-spacing:-.035em;line-height:.98">A creative studio.</h2>
+        <p style="margin:18px 0 0;font-size:clamp(15px,1.6vw,20px);line-height:1.55;opacity:.62">More than just a server — Compbuild is a place to create. Anyone can start, everyone builds, and together we shape realistic worlds that last.</p>
       </div>
-      <img src="https://i.imgur.com/1aooosf.png?auto=format&fit=crop&w=700&q=80" alt="Alaire" />
-    </div>
-
-    <div class="grid" style="margin-top: 100px;">
-      <img src="https://media.discordapp.net/attachments/796149186307293244/1360775468277698682/2025-04-12_19.35.03.png?format=webp&quality=lossless&width=1521&height=856" alt="Austin" />
-      <div>
-        <h2>Austin</h2>
-        <p>“This modern Texan city blends grit and gleaming skylines.”</p>
-      </div>
-    </div>
-
-    <div class="grid" style="margin-top: 100px;">
-      <div>
-        <h2>Havelle</h2>
-        <p>“Nestled on a wide river of marshland, this prehistoric European city is timeless.”</p>
-      </div>
-      <img src="https://media.discordapp.net/attachments/796149186307293244/1370550266830524478/2025-05-09_18.56.24.png?format=webp&quality=lossless&width=1521&height=856" alt="Havelle" />
+      <span style="font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;opacity:.4">Keep scrolling</span>
     </div>
   </section>
 
-  <!-- Section 3: Textures -->
-  <section id="textures">
-    <h1>CHANGING UP THE LOOKS.</h1>
-    <p>A one of a kind revolutionary texture pack for Minecraft architecture, visualization, creativity, and made for more than just our projects. Download Compbuild Textures to make your creativity fantastic.</p>
-
-    <div class="texture-gallery">
-      <div class="texture-header">
-        <h2>PHOTO GALLERY</h2>
-        <div class="nav">← →</div>
+  <!-- studio: reading reveal -->
+  <section id="studio" data-read-wrap style="position:relative;height:330vh;border-top:1px solid var(--line,rgba(11,11,11,.14));transition:border-color .6s ease">
+    <div style="position:sticky;top:0;height:100vh;display:flex;align-items:center;padding:0 clamp(20px,6vw,110px)">
+      <div style="max-width:1100px">
+        <div style="font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;opacity:.5;margin-bottom:clamp(24px,4vh,46px)">01 — The studio</div>
+        <p data-read style="margin:0;font-weight:500;font-size:clamp(26px,4.3vw,60px);line-height:1.16;letter-spacing:-.02em">Compbuild is a creative studio. We design and build realistic projects and worlds meant to last — choosing longevity over novelty, restraint over excess, and shared craft over individual ownership.</p>
       </div>
+    </div>
+  </section>
 
-      <div class="texture-grid">
-        <div class="texture-item">
-          <p>Structural Spectrum Pack</p>
-          <img src="https://images.unsplash.com/photo-1602524208701-4032e1f4b1a9?auto=format&fit=crop&w=1600&q=80" alt="Compbuild Texture 1">
+  <!-- history: horizontal timeline -->
+  <section data-htimeline style="position:relative;height:440vh;border-top:1px solid var(--line,rgba(11,11,11,.14));transition:border-color .6s ease">
+    <div style="position:sticky;top:0;height:100vh;overflow:hidden;display:flex;flex-direction:column;justify-content:center">
+      <div style="position:absolute;top:0;left:0;right:0;display:flex;align-items:baseline;justify-content:space-between;padding:clamp(86px,12vh,118px) clamp(20px,4vw,56px) 0">
+        <h2 style="margin:0;font-weight:700;font-size:clamp(32px,5vw,72px);letter-spacing:-.035em;line-height:.96">A brief history</h2>
+        <span style="font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;opacity:.5">2017 — Today</span>
+      </div>
+      <div data-htrack style="display:flex;align-items:stretch;gap:clamp(18px,2vw,34px);padding:0 clamp(20px,4vw,56px);will-change:transform">
+        <article style="flex:none;width:clamp(280px,72vw,500px);border-top:1px solid var(--fg,#0b0b0b);padding-top:22px;display:flex;flex-direction:column">
+          <span style="font-weight:600;font-size:clamp(54px,8vw,120px);letter-spacing:-.04em;line-height:.9">2017</span>
+          <span style="font-size:13px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;opacity:.5;margin:18px 0 12px">Founded</span>
+          <p style="margin:0;max-width:42ch;font-size:16px;line-height:1.55;opacity:.66">A creative building project centered on exploration — learning through trial, error, and visual ideas.</p>
+        </article>
+        <article style="flex:none;width:clamp(280px,72vw,500px);border-top:1px solid var(--fg,#0b0b0b);padding-top:22px;display:flex;flex-direction:column">
+          <span style="font-weight:600;font-size:clamp(54px,8vw,120px);letter-spacing:-.04em;line-height:.9">2020</span>
+          <span style="font-size:13px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;opacity:.5;margin:18px 0 12px">Realism &amp; scale</span>
+          <p style="margin:0;max-width:42ch;font-size:16px;line-height:1.55;opacity:.66">Architectural detail and larger environments. The first large-scale builds pushed the project toward coherence.</p>
+        </article>
+        <article style="flex:none;width:clamp(280px,72vw,500px);border-top:1px solid var(--fg,#0b0b0b);padding-top:22px;display:flex;flex-direction:column">
+          <span style="font-weight:600;font-size:clamp(54px,8vw,120px);letter-spacing:-.04em;line-height:.9">2024</span>
+          <span style="font-size:13px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;opacity:.5;margin:18px 0 12px">Intentional growth</span>
+          <p style="margin:0;max-width:42ch;font-size:16px;line-height:1.55;opacity:.66">Rapid, deliberate growth — clearer systems and a stronger emphasis on continuity and restraint.</p>
+        </article>
+        <article style="flex:none;width:clamp(280px,72vw,500px);border-top:1px solid var(--fg,#0b0b0b);padding-top:22px;display:flex;flex-direction:column">
+          <span style="font-weight:600;font-size:clamp(54px,8vw,120px);letter-spacing:-.04em;line-height:.9">2026</span>
+          <span style="font-size:13px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;opacity:.5;margin:18px 0 12px">Compbuild today</span>
+          <p style="margin:0;max-width:42ch;font-size:16px;line-height:1.55;opacity:.66">An adaptable studio with its own workflows, UX, and a distinct creative identity — built for the long view.</p>
+        </article>
+        <div style="flex:none;width:clamp(20px,6vw,120px)"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- getting started: newcomer steps -->
+  <section data-steps style="position:relative;padding:clamp(54px,9vh,120px) clamp(20px,4vw,56px);border-top:1px solid var(--line,rgba(11,11,11,.14));transition:border-color .6s ease;overflow:hidden">
+    <div style="display:flex;align-items:baseline;justify-content:space-between;gap:20px;margin-bottom:clamp(34px,6vh,72px)">
+      <h2 data-split style="margin:0;font-weight:700;font-size:clamp(32px,5vw,72px);letter-spacing:-.035em;line-height:.96">New here? Start in three.</h2>
+      <span style="font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;opacity:.5">No experience needed</span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:clamp(20px,3vw,40px)">
+      <div data-reveal data-rv="left" data-step style="display:flex;flex-direction:column;gap:18px">
+        <div style="display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--fg,#0b0b0b);padding-top:16px">
+          <span style="font-weight:600;font-size:clamp(40px,5vw,72px);letter-spacing:-.03em;line-height:1">01</span>
+          <span data-step-arrow style="font-size:clamp(28px,3vw,44px);line-height:1;opacity:.3">↗</span>
         </div>
-        <div class="texture-item">
-          <p>Architectural Illumination Kit</p>
-          <img src="https://images.unsplash.com/photo-1600607687331-551db975d1f3?auto=format&fit=crop&w=1600&q=80" alt="Compbuild Texture 2">
+        <div style="font-weight:700;font-size:clamp(19px,1.8vw,24px);letter-spacing:-.01em">Get the textures</div>
+        <p style="margin:0;font-size:15px;line-height:1.55;opacity:.62">Download the free Compbuild pack and Luminium modpack. If Minecraft runs, you're ready — no setup headaches.</p>
+      </div>
+      <div data-reveal data-rv="up" data-reveal-delay="120" data-step style="display:flex;flex-direction:column;gap:18px">
+        <div style="display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--fg,#0b0b0b);padding-top:16px">
+          <span style="font-weight:600;font-size:clamp(40px,5vw,72px);letter-spacing:-.03em;line-height:1">02</span>
+          <span data-step-arrow style="font-size:clamp(28px,3vw,44px);line-height:1;opacity:.3">↗</span>
         </div>
+        <div style="font-weight:700;font-size:clamp(19px,1.8vw,24px);letter-spacing:-.01em">Join the server</div>
+        <p style="margin:0;font-size:15px;line-height:1.55;opacity:.62">Connect to <strong style="font-weight:700">play.compbuild.net</strong>, look around the projects, and meet the people building them.</p>
+      </div>
+      <div data-reveal data-rv="right" data-reveal-delay="240" data-step style="display:flex;flex-direction:column;gap:18px">
+        <div style="display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--fg,#0b0b0b);padding-top:16px">
+          <span style="font-weight:600;font-size:clamp(40px,5vw,72px);letter-spacing:-.03em;line-height:1">03</span>
+          <span data-step-arrow style="font-size:clamp(28px,3vw,44px);line-height:1;opacity:.3">↗</span>
+        </div>
+        <div style="font-weight:700;font-size:clamp(19px,1.8vw,24px);letter-spacing:-.01em">Apply for member</div>
+        <p style="margin:0;font-size:15px;line-height:1.55;opacity:.62">Apply for member on our server to claim a plot and start building. Responsibility is earned gradually — every contribution shapes the larger city.</p>
       </div>
     </div>
-
-    <h2 style="margin-top:60px;">FEATURES:</h2>
-    <ul class="features">
-      <li>• REGULAR UPDATES</li>
-      <li>• 1000+ UNIQUE MODELS AND TEXTURES</li>
-      <li>• BIOME DEPENDENT BLOCKS AND TEXTURES</li>
-      <li>• EVERY SINGLE BLOCK TEXTURED</li>
-      <li>• JUST TRY IT ALREADY</li>
-    </ul>
-
-    <div style="margin-top:40px;">
-      <a href="#" class="button">DOWNLOAD</a>
-      <a href="#" class="button">CATALOG</a>
-      <a href="#" class="button">GITHUB</a>
-    </div>
-
-    <p style="margin-top:20px; font-size:13px; color:#666;">REQUIRES OPTIFINE*</p>
   </section>
 
-  <!-- Section 4: Join -->
-  <section id="join">
-    <h1>BE A PART OF IT.</h1>
-    <p>WHAT ARE YOU WAITING FOR?<br>Become a member of our community today by joining our server, as well as applying on our Discord.</p>
-    <div style="margin-top:40px;">
-      <p style="font-weight:700; font-size:18px;">IP: PLAY.COMPBUILDREDUX.NET</p>
+  <!-- worlds: editorial list -->
+  <section id="worlds" style="padding:clamp(54px,9vh,120px) clamp(20px,4vw,56px);border-top:1px solid var(--line,rgba(11,11,11,.14));transition:border-color .6s ease">
+    <div style="display:flex;align-items:baseline;justify-content:space-between;gap:20px;margin-bottom:clamp(40px,7vh,84px)">
+      <h2 data-split style="margin:0;font-weight:700;font-size:clamp(34px,5.5vw,84px);letter-spacing:-.04em;line-height:.95">The worlds</h2>
+      <span style="font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;opacity:.5">Four featured projects</span>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:clamp(28px,4vw,64px);align-items:flex-start">
+      <div style="flex:1 1 360px;position:sticky;top:clamp(80px,12vh,108px);align-self:flex-start">
+        <div data-worlds-stage style="position:relative;aspect-ratio:4/3;overflow:hidden;background:#0d0d0d;border:1px solid var(--line,rgba(11,11,11,.14));transition:border-color .6s ease">
+          <img data-wimg="Alaire" src="assets/world-alaire.webp" alt="Alaire build" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:1;transform:scale(1);transition:opacity .8s ease,transform 1.6s cubic-bezier(.16,.9,.24,1);will-change:opacity,transform"/>
+          <img data-wimg="Kassan" src="assets/world-kassan.webp" alt="Kassan build" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.05);transition:opacity .8s ease,transform 1.6s cubic-bezier(.16,.9,.24,1);will-change:opacity,transform"/>
+          <img data-wimg="Austin" src="assets/world-austin.webp" alt="Austin build" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.05);transition:opacity .8s ease,transform 1.6s cubic-bezier(.16,.9,.24,1);will-change:opacity,transform"/>
+          <img data-wimg="Havelle" src="assets/world-havelle.webp" alt="Havelle build" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.05);transition:opacity .8s ease,transform 1.6s cubic-bezier(.16,.9,.24,1);will-change:opacity,transform"/>
+          <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.58),rgba(0,0,0,0) 46%);pointer-events:none"></div>
+          <div style="position:absolute;left:clamp(16px,2vw,26px);right:clamp(16px,2vw,26px);bottom:clamp(16px,2vw,24px);display:flex;align-items:flex-end;justify-content:space-between;gap:14px;color:#fff;pointer-events:none">
+            <span data-worlds-name style="font-weight:600;font-size:clamp(24px,3vw,40px);letter-spacing:-.02em;line-height:1;text-shadow:0 2px 18px rgba(0,0,0,.45)">Alaire</span>
+            <span data-worlds-tag style="font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;opacity:.85;white-space:nowrap;padding-bottom:6px">Featured</span>
+          </div>
+        </div>
+      </div>
+      <div data-proj-list style="flex:1 1 460px;min-width:300px">
+      <a href="alaire.html" data-proj data-name="Alaire" data-img="assets/world-alaire.webp" style="border-top:1px solid var(--line,rgba(11,11,11,.14));padding:clamp(20px,3vh,38px) 0;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:clamp(16px,3vw,48px);transition:padding-left .45s cubic-bezier(.2,.7,.2,1),border-color .6s ease;text-decoration:none;color:inherit">
+        <span style="font-size:13px;font-weight:600;opacity:.45;width:34px">01</span>
+        <div style="display:flex;align-items:baseline;gap:clamp(16px,3vw,40px);flex-wrap:wrap">
+          <span data-proj-name style="font-weight:600;font-size:clamp(30px,5vw,76px);letter-spacing:-.03em;line-height:1;transition:transform .45s cubic-bezier(.2,.7,.2,1)">Alaire</span>
+          <span style="max-width:40ch;font-size:15px;line-height:1.5;opacity:.62">A 20,000-block metropolitan region — a dense primary core and satellite districts, guided by real-world planning.</span>
+        </div>
+        <span style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;opacity:.5;white-space:nowrap">Featured →</span>
+      </a>
+      <a href="kassan.html" data-proj data-name="Kassan" data-img="assets/world-kassan.webp" style="border-top:1px solid var(--line,rgba(11,11,11,.14));padding:clamp(20px,3vh,38px) 0;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:clamp(16px,3vw,48px);transition:padding-left .45s cubic-bezier(.2,.7,.2,1),border-color .6s ease;text-decoration:none;color:inherit">
+        <span style="font-size:13px;font-weight:600;opacity:.45;width:34px">02</span>
+        <div style="display:flex;align-items:baseline;gap:clamp(16px,3vw,40px);flex-wrap:wrap">
+          <span data-proj-name style="font-weight:600;font-size:clamp(30px,5vw,76px);letter-spacing:-.03em;line-height:1;transition:transform .45s cubic-bezier(.2,.7,.2,1)">Kassan</span>
+          <span style="max-width:40ch;font-size:15px;line-height:1.5;opacity:.62">A design-forward coastal city — clean lines and bold massing, Miami meets New York.</span>
+        </div>
+        <span style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;opacity:.5;white-space:nowrap">Modern →</span>
+      </a>
+      <a href="austin.html" data-proj data-name="Austin" data-img="assets/world-austin.webp" style="border-top:1px solid var(--line,rgba(11,11,11,.14));padding:clamp(20px,3vh,38px) 0;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:clamp(16px,3vw,48px);transition:padding-left .45s cubic-bezier(.2,.7,.2,1),border-color .6s ease;text-decoration:none;color:inherit">
+        <span style="font-size:13px;font-weight:600;opacity:.45;width:34px">03</span>
+        <div style="display:flex;align-items:baseline;gap:clamp(16px,3vw,40px);flex-wrap:wrap">
+          <span data-proj-name style="font-weight:600;font-size:clamp(30px,5vw,76px);letter-spacing:-.03em;line-height:1;transition:transform .45s cubic-bezier(.2,.7,.2,1)">Austin</span>
+          <span style="max-width:40ch;font-size:15px;line-height:1.5;opacity:.62">A reference-driven re-creation of Austin, Texas — our learning ground for fundamentals.</span>
+        </div>
+        <span style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;opacity:.5;white-space:nowrap">Recreation →</span>
+      </a>
+      <a href="havelle.html" data-proj data-name="Havelle" data-img="assets/world-havelle.webp" style="border-top:1px solid var(--line,rgba(11,11,11,.14));border-bottom:1px solid var(--line,rgba(11,11,11,.14));padding:clamp(20px,3vh,38px) 0;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:clamp(16px,3vw,48px);transition:padding-left .45s cubic-bezier(.2,.7,.2,1),border-color .6s ease;text-decoration:none;color:inherit">
+        <span style="font-size:13px;font-weight:600;opacity:.45;width:34px">04</span>
+        <div style="display:flex;align-items:baseline;gap:clamp(16px,3vw,40px);flex-wrap:wrap">
+          <span data-proj-name style="font-weight:600;font-size:clamp(30px,5vw,76px);letter-spacing:-.03em;line-height:1;transition:transform .45s cubic-bezier(.2,.7,.2,1)">Havelle</span>
+          <span style="max-width:40ch;font-size:15px;line-height:1.5;opacity:.62">A European-inspired city of stone, moss, and mist — traditional architecture along the River Eldern.</span>
+        </div>
+        <span style="font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;opacity:.5;white-space:nowrap">European →</span>
+      </a>
+    </div>
     </div>
   </section>
 
-  <footer>
-    <p>©2025 COMPBUILD REDUX<br>Not an official Minecraft service. Not affiliated with Mojang or Microsoft.</p>
+  <!-- textures: pink gradient pack -->
+  <section id="textures" data-pack style="position:relative;background:#08080a;color:#fff;padding:clamp(60px,13vh,160px) clamp(20px,4vw,56px);overflow:hidden">
+    <img data-pack-img src="assets/pack-gradient.png" alt="" style="position:absolute;right:-5%;top:clamp(90px,16vh,210px);width:clamp(280px,40vw,640px);transform:translateY(0);opacity:.9;pointer-events:none;will-change:transform"/>
+    <div style="position:relative;z-index:2;max-width:760px">
+      <div style="font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;margin-bottom:clamp(24px,4vh,46px);background:linear-gradient(110deg,#ff2f80,#ff8fb8);-webkit-background-clip:text;background-clip:text;color:transparent;display:inline-block">02 — The toolkit</div>
+      <h2 data-wipe style="margin:0;font-weight:700;font-size:clamp(40px,8vw,128px);line-height:.9;letter-spacing:-.04em;background:linear-gradient(110deg,#ff2f80 0%,#ff7eb0 45%,#ffd4e3 80%);background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:cbGrad 6s linear infinite alternate">Compbuild<br>Textures</h2>
+      <p style="margin:clamp(24px,4vh,40px) 0 0;max-width:46ch;font-size:clamp(16px,1.5vw,20px);line-height:1.55;opacity:.82">A free, architecture-first texture pack. Clean materials, real-world references, and visual consistency — optimized to run on everyday hardware. If Minecraft runs, the pack runs.</p>
+      <div style="margin-top:clamp(28px,4vh,44px);max-width:520px;display:flex;flex-direction:column;border-top:1px solid rgba(255,255,255,.18)">
+        <div data-reveal style="opacity:0;transform:translateY(20px);transition:opacity .8s,transform .8s;display:flex;justify-content:space-between;padding:15px 0;border-bottom:1px solid rgba(255,255,255,.18)"><span style="font-weight:600">Resolution</span><span style="opacity:.7">128 × 128</span></div>
+        <div data-reveal data-reveal-delay="80" style="opacity:0;transform:translateY(20px);transition:opacity .8s,transform .8s;display:flex;justify-content:space-between;padding:15px 0;border-bottom:1px solid rgba(255,255,255,.18)"><span style="font-weight:600">Price</span><span style="opacity:.7">Free forever</span></div>
+        <div data-reveal data-reveal-delay="160" style="opacity:0;transform:translateY(20px);transition:opacity .8s,transform .8s;display:flex;justify-content:space-between;padding:15px 0;border-bottom:1px solid rgba(255,255,255,.18)"><span style="font-weight:600">Luminium modpack</span><span style="background:linear-gradient(110deg,#ff2f80,#ff9bc2);-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:600">Sodium · Iris · Continuity</span></div>
+      </div>
+      <div style="margin-top:clamp(28px,4vh,40px);display:flex;gap:13px;flex-wrap:wrap">
+        <a href="https://modrinth.com/resourcepack/compbuild-textures" target="_blank" rel="noopener" data-hover data-magnetic style="display:inline-flex;align-items:center;gap:12px;text-decoration:none;padding:15px 24px;border-radius:9px;background:linear-gradient(110deg,#ff2f80,#ff7eb0);color:#fff;font-weight:700;font-size:15px;transition:opacity .25s ease,transform .2s ease" onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'">
+          <svg viewBox="0 0 24 24" style="width:18px;height:18px;display:block" fill="currentColor"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Zm0 3.2a6.8 6.8 0 0 1 6.06 3.71h-3.2A3.78 3.78 0 0 0 12 7.4a3.79 3.79 0 0 0-1.78.44L8.6 6.05A6.76 6.76 0 0 1 12 5.2ZM5.2 12a6.78 6.78 0 0 1 1.84-4.64l1.62 1.62A4.6 4.6 0 0 0 7.4 12a4.62 4.62 0 0 0 .26 1.52l-2.07.74A6.77 6.77 0 0 1 5.2 12Zm6.8 6.8a6.79 6.79 0 0 1-5.07-2.27l2.08-.74A4.61 4.61 0 0 0 14.4 14h2.34a6.78 6.78 0 0 1-4.74 4.8Z"></path></svg>
+          Download on Modrinth
+        </a>
+        <a href="https://github.com/Compbuild/Compbuild-Textures" target="_blank" rel="noopener" data-hover data-magnetic style="display:inline-flex;align-items:center;gap:12px;text-decoration:none;padding:15px 24px;border-radius:9px;border:1px solid rgba(255,255,255,.32);color:#fff;font-weight:700;font-size:15px;transition:background-color .25s ease,color .25s ease,transform .2s ease" onmouseover="this.style.background='#fff';this.style.color='#08080a'" onmouseout="this.style.background='transparent';this.style.color='#fff'">
+          <svg viewBox="0 0 24 24" style="width:18px;height:18px;display:block" fill="currentColor"><path d="M12 1.5A10.5 10.5 0 0 0 8.68 22a.6.6 0 0 0 .8-.57v-2c-2.92.64-3.54-1.4-3.54-1.4a2.78 2.78 0 0 0-1.17-1.54c-.95-.65.07-.64.07-.64a2.2 2.2 0 0 1 1.61 1.08 2.24 2.24 0 0 0 3.05.87 2.24 2.24 0 0 1 .67-1.41c-2.33-.27-4.78-1.17-4.78-5.18a4.06 4.06 0 0 1 1.08-2.82 3.77 3.77 0 0 1 .1-2.78s.88-.28 2.88 1.07a9.9 9.9 0 0 1 5.24 0c2-1.35 2.88-1.07 2.88-1.07a3.77 3.77 0 0 1 .1 2.78 4.06 4.06 0 0 1 1.08 2.82c0 4-2.46 4.9-4.8 5.16a2.5 2.5 0 0 1 .72 1.95v2.89a.6.6 0 0 0 .81.57A10.5 10.5 0 0 0 12 1.5Z"></path></svg>
+          View on GitHub
+        </a>
+      </div>
+      <p style="margin:20px 0 0;font-size:13px;opacity:.5;line-height:1.5">100% vanilla-friendly — full OptiFine parity, no new content.</p>
+    </div>
+    <div style="position:relative;z-index:2;margin-top:clamp(44px,7vh,90px);display:grid;grid-template-columns:repeat(12,1fr);gap:clamp(10px,1.4vw,18px)">
+      <div data-reveal style="opacity:0;transform:translateY(20px);transition:opacity .9s,transform .9s;grid-column:span 7;aspect-ratio:16/9;overflow:hidden;border-radius:6px;background:#111"><img src="assets/tex-1.webp" alt="Compbuild Textures — structure &amp; massing material palette" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block"/></div>
+      <div data-reveal data-reveal-delay="90" style="opacity:0;transform:translateY(20px);transition:opacity .9s,transform .9s;grid-column:span 5;aspect-ratio:16/9;overflow:hidden;border-radius:6px;background:#111"><img src="assets/tex-4.webp" alt="Compbuild Textures — furniture renders" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block"/></div>
+      <div data-reveal data-reveal-delay="170" style="opacity:0;transform:translateY(20px);transition:opacity .9s,transform .9s;grid-column:span 5;aspect-ratio:16/9;overflow:hidden;border-radius:6px;background:#111"><img src="assets/tex-2.webp" alt="Compbuild Textures — interior lighting and brick" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block"/></div>
+      <div data-reveal data-reveal-delay="250" style="opacity:0;transform:translateY(20px);transition:opacity .9s,transform .9s;grid-column:span 7;aspect-ratio:16/9;overflow:hidden;border-radius:6px;background:#111"><img src="assets/tex-3.webp" alt="Compbuild Textures — skyline build with the pack" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block"/></div>
+    </div>
+  </section>
+
+  <!-- support -->
+  <section id="support" style="padding:clamp(54px,9vh,120px) clamp(20px,4vw,56px)">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-bottom:clamp(30px,5vh,56px)">
+      <h2 data-split style="margin:0;font-weight:700;font-size:clamp(32px,5vw,72px);letter-spacing:-.035em;line-height:.96">Support the studio</h2>
+      <p style="margin:0;max-width:40ch;font-size:15px;line-height:1.55;opacity:.62">Optional tiers that sustain texture development and infrastructure. No pay-to-win — the core is always free.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:0;border:1px solid var(--line,rgba(11,11,11,.14));transition:border-color .6s ease">
+      <div data-reveal style="opacity:0;transform:translateY(24px);transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1);padding:clamp(28px,3vw,48px);border-right:1px solid var(--line,rgba(11,11,11,.14))">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:26px"><span style="font-weight:700;font-size:22px">Plus</span><span style="font-size:15px;opacity:.6">$5 / mo</span></div>
+        <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:14px;font-size:15px;line-height:1.45;opacity:.72">
+          <li style="display:flex;gap:12px"><span>—</span>Early access to texture updates</li>
+          <li style="display:flex;gap:12px"><span>—</span>The Compbuild Concepts pack</li>
+          <li style="display:flex;gap:12px"><span>—</span>Supporter recognition</li>
+        </ul>
+        <a href="https://www.patreon.com/c/compbuild" target="_blank" rel="noopener" data-hover style="margin-top:28px;display:inline-flex;align-items:center;justify-content:space-between;gap:14px;text-decoration:none;padding:14px 20px;border:1px solid var(--fg,#0b0b0b);border-radius:8px;color:var(--fg,#0b0b0b);font-weight:700;font-size:14px;transition:background-color .25s ease,color .25s ease" onmouseover="this.style.background='var(--fg,#0b0b0b)';this.style.color='var(--bg,#fff)'" onmouseout="this.style.background='transparent';this.style.color='var(--fg,#0b0b0b)'">Support on Patreon <span style="font-size:16px">↗</span></a>
+      </div>
+      <div data-reveal data-reveal-delay="110" style="opacity:0;transform:translateY(24px);transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1);padding:clamp(28px,3vw,48px);background:var(--fg,#0b0b0b);color:var(--bg,#fff);transition:background-color .6s ease,color .6s ease,opacity .9s,transform .9s">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:26px"><span style="font-weight:700;font-size:22px">Pro</span><span style="font-size:15px;opacity:.6">$15 / mo</span></div>
+        <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:14px;font-size:15px;line-height:1.45;opacity:.85">
+          <li style="display:flex;gap:12px"><span>—</span>Everything in Plus</li>
+          <li style="display:flex;gap:12px"><span>—</span>The Pro Vault — dioramas, worlds, archives</li>
+          <li style="display:flex;gap:12px"><span>—</span>Early access to larger releases</li>
+        </ul>
+        <a href="https://www.patreon.com/c/compbuild" target="_blank" rel="noopener" data-hover style="margin-top:28px;display:inline-flex;align-items:center;justify-content:space-between;gap:14px;text-decoration:none;padding:14px 20px;border-radius:8px;background:var(--bg,#fff);color:var(--fg,#0b0b0b);font-weight:700;font-size:14px;transition:opacity .25s ease" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">Become a Pro on Patreon <span style="font-size:16px">↗</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA footer -->
+  <footer style="background:var(--fg,#0b0b0b);color:var(--bg,#fff);padding:clamp(64px,12vh,150px) clamp(20px,4vw,56px) clamp(32px,5vh,52px);transition:background-color .6s ease,color .6s ease;overflow:hidden">
+    <div style="font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;opacity:.55;margin-bottom:26px">03 — Join</div>
+    <h2 data-split style="margin:0 0 clamp(34px,6vh,64px);font-weight:700;font-size:clamp(52px,12vw,210px);line-height:.82;letter-spacing:-.05em">Start building.</h2>
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:30px;flex-wrap:wrap">
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <span style="font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;opacity:.5">Connect to the server</span>
+        <button data-magnetic data-hover data-action="copyIp" style="cursor:none;display:inline-flex;align-items:center;gap:16px;padding:18px 26px;border:1px solid rgba(255,255,255,.28);border-radius:10px;background:transparent;color:var(--bg,#fff);font-family:inherit;transition:background-color .25s ease,color .25s ease,transform .2s ease" onmouseover="this.style.background='var(--bg,#fff)';this.style.color='var(--fg,#0b0b0b)'" onmouseout="this.style.background='transparent';this.style.color='var(--bg,#fff)'">
+          <span data-ip-label style="font-weight:700;font-size:clamp(18px,2.2vw,26px);letter-spacing:-.01em">play.compbuild.net</span>
+          <span style="font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;opacity:.6">Copy</span>
+        </button>
+      </div>
+      <div style="display:flex;gap:clamp(28px,5vw,70px);flex-wrap:wrap">
+        <div style="display:flex;flex-direction:column;gap:11px"><span style="font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;opacity:.5">Worlds</span><a href="#worlds" data-hover style="text-decoration:none;color:var(--bg,#fff);font-size:14px;opacity:.85">Projects</a><a href="#worlds" data-hover style="text-decoration:none;color:var(--bg,#fff);font-size:14px;opacity:.85">Build-worlds</a></div>
+        <div style="display:flex;flex-direction:column;gap:11px"><span style="font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;opacity:.5">Studio</span><a href="#studio" data-hover style="text-decoration:none;color:var(--bg,#fff);font-size:14px;opacity:.85">About</a><a href="#support" data-hover style="text-decoration:none;color:var(--bg,#fff);font-size:14px;opacity:.85">Support</a></div>
+        <div style="display:flex;flex-direction:column;gap:11px"><span style="font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;opacity:.5">Connect</span><a href="https://discord.gg/Kw7stMa" target="_blank" rel="noopener" data-hover style="text-decoration:none;color:var(--bg,#fff);font-size:14px;opacity:.85">Discord</a><a href="https://www.patreon.com/c/compbuild" target="_blank" rel="noopener" data-hover style="text-decoration:none;color:var(--bg,#fff);font-size:14px;opacity:.85">Patreon</a></div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-top:clamp(48px,8vh,84px);padding-top:24px;border-top:1px solid rgba(255,255,255,.18);font-size:12px;font-weight:500;opacity:.55">
+      <span>© 2026 Compbuild Studios</span>
+    </div>
   </footer>
+</div>
+<script>
+// Lightweight standalone runtime: the design's component logic is pure DOM code,
+// so we keep it verbatim and provide a minimal base class + bootstrap in place of
+// the original Design Component (React) runtime.
+class DCLogic { constructor(props){ this.props = props || {}; } }
 
-  <script>
-    const sections = document.querySelectorAll('section');
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
+class Component extends DCLogic {
+  constructor(props){
+    super(props);
+    this.mode = String(props.startMode || 'Light').toLowerCase() === 'dark' ? 'dark' : 'light';
+  }
+  themes(){
+    return {
+      light: {'--bg':'#ffffff','--fg':'#0b0b0b','--muted':'#8a8a8a','--line':'rgba(11,11,11,0.14)'},
+      dark:  {'--bg':'#0a0a0a','--fg':'#fafafa','--muted':'#8a8a8a','--line':'rgba(255,255,255,0.15)'}
+    };
+  }
+  applyTheme(mode){
+    if(!this.root) return;
+    const t = this.themes()[mode];
+    Object.keys(t).forEach(k => this.root.style.setProperty(k, t[k]));
+    this.root.querySelectorAll('[data-logo],[data-loader-logo]').forEach(logo=>{ logo.style.filter = mode === 'dark' ? 'invert(1)' : 'none'; });
+  }
+  toggleTheme(){
+    this.mode = this.mode === 'dark' ? 'light' : 'dark';
+    this.applyTheme(this.mode);
+    try { localStorage.setItem('cb-theme-one', this.mode); } catch(e){}
+  }
+  copyIp(){
+    const ip = 'play.compbuild.net';
+    const done = ()=>{
+      this.root.querySelectorAll('[data-ip-label]').forEach(el=>{
+        if(el._t) clearTimeout(el._t);
+        const orig = el._orig || (el._orig = el.textContent);
+        el.textContent = 'Copied ✓';
+        el._t = setTimeout(()=>{ el.textContent = orig; }, 1500);
       });
-    }, { threshold: 0.15 });
+    };
+    try {
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(ip).then(done, done);
+      } else { throw new Error('nc'); }
+    } catch(e){
+      const ta = document.createElement('textarea');
+      ta.value = ip; ta.style.position='fixed'; ta.style.opacity='0';
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); } catch(_){}
+      document.body.removeChild(ta); done();
+    }
+  }
+  clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
+  splitLetters(el){
+    const frag = document.createDocumentFragment();
+    const spans = [];
+    Array.prototype.forEach.call(el.childNodes, node=>{
+      if(node.nodeType === 3){
+        node.textContent.split('').forEach(ch=>{
+          if(ch === ' '){ frag.appendChild(document.createTextNode('\u00A0')); return; }
+          const s = document.createElement('span');
+          s.textContent = ch;
+          s.style.display = 'inline-block';
+          s.style.willChange = 'transform,opacity';
+          spans.push(s);
+          frag.appendChild(s);
+        });
+      } else if(node.nodeName === 'BR'){
+        frag.appendChild(document.createElement('br'));
+      } else {
+        frag.appendChild(node.cloneNode(true));
+      }
+    });
+    el.innerHTML = '';
+    el.appendChild(frag);
+    return spans;
+  }
+  revealSplit(spans){
+    spans.forEach((s, i)=>{
+      s.style.transition = 'transform 1s cubic-bezier(.16,.9,.24,1), opacity .55s ease';
+      s.style.transitionDelay = (i * 30) + 'ms';
+      requestAnimationFrame(()=>{ s.style.transform = 'translateY(0)'; s.style.opacity = '1'; });
+    });
+  }
+  hideSplit(spans){
+    spans.forEach(s=>{ s.style.opacity = '0'; s.style.transform = 'translateY(1em)'; s.style.transformOrigin = '50% 100%'; });
+  }
+  primeReveal(el){
+    // editorial directional reveal — clean, no blur. Direction via data-rv.
+    const dir = el.getAttribute('data-rv') || 'up';
+    el.style.willChange = 'opacity,transform,clip-path';
+    el.style.transition = 'opacity .8s cubic-bezier(.2,.7,.2,1), transform 1.05s cubic-bezier(.16,.9,.24,1), clip-path 1.05s cubic-bezier(.16,.9,.24,1)';
+    el.style.opacity = '0';
+    if(dir === 'left'){ el.style.transform = 'translateX(-7vw)'; }
+    else if(dir === 'right'){ el.style.transform = 'translateX(7vw)'; }
+    else if(dir === 'scale'){ el.style.transform = 'scale(.94)'; }
+    else if(dir === 'mask'){ el.style.transform = 'translateY(26px)'; el.style.clipPath = 'inset(0 0 100% 0)'; }
+    else { el.style.transform = 'translateY(42px)'; }
+  }
+  fireReveal(el){
+    el.style.opacity = '1';
+    el.style.transform = 'none';
+    el.style.clipPath = 'inset(0 0 0% 0)';
+  }
+  componentDidMount(){
+    this.root = document.querySelector('[data-cb="ONE"]');
+    if(!this.root) return;
+    let saved = null;
+    try { saved = localStorage.getItem('cb-theme-one'); } catch(e){}
+    if(saved === 'dark' || saved === 'light') this.mode = saved;
+    this.applyTheme(this.mode);
+    this.reduce = !!this.props.reduceMotion || (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    this.fine = window.matchMedia && window.matchMedia('(pointer:fine)').matches;
 
-    sections.forEach(section => observer.observe(section));
-  </script>
+    // hero wordmark — split + load reveal
+    const hero = this.root.querySelector('[data-hero-mark]');
+    if(hero){
+      const spans = this.splitLetters(hero);
+      if(this.reduce){ spans.forEach(s=>{s.style.opacity='1';}); }
+      else { this.hideSplit(spans); setTimeout(()=> this.revealSplit(spans), 120); }
+    }
+
+    // reveal system (IntersectionObserver + scroll-position fallback)
+    this.revealEl = (el)=>{
+      if(el._revealed) return; el._revealed = true;
+      if(el.hasAttribute('data-split') && el._spans){ this.revealSplit(el._spans); }
+      else if(el.hasAttribute('data-wipe')){ el.style.clipPath = 'inset(0 0 0 0)'; }
+      else if(el.hasAttribute('data-logo-build')){ const r = el.querySelector('[data-logo-right]'); if(r) r.style.transform = 'translateX(0px)'; }
+      else { this.fireReveal(el); }
+    };
+    this.revealables = [];
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{ if(e.isIntersecting){ this.revealEl(e.target); io.unobserve(e.target); } });
+    }, { threshold: 0.15, rootMargin: '0px 0px -6% 0px' });
+
+    this.root.querySelectorAll('[data-split]').forEach(el=>{
+      const spans = this.splitLetters(el);
+      el._spans = spans;
+      if(this.reduce){ spans.forEach(s=>{s.style.opacity='1';}); el._revealed = true; }
+      else { this.hideSplit(spans); this.revealables.push(el); io.observe(el); }
+    });
+    this.root.querySelectorAll('[data-wipe]').forEach(el=>{
+      if(this.reduce){ el._revealed = true; return; }
+      el.style.clipPath = 'inset(0 100% 0 0)';
+      el.style.transition = 'clip-path 1.1s cubic-bezier(.5,0,.1,1)';
+      this.revealables.push(el); io.observe(el);
+    });
+    this.root.querySelectorAll('[data-logo-build]').forEach(el=>{
+      const r = el.querySelector('[data-logo-right]');
+      if(this.reduce){ if(r) r.style.transform = 'translateX(0px)'; el._revealed = true; return; }
+      this.revealables.push(el); io.observe(el);
+    });
+    this.root.querySelectorAll('[data-reveal]').forEach(el=>{
+      if(this.reduce){ el.style.opacity='1'; el.style.transform='none'; el.style.filter='none'; el._revealed = true; return; }
+      this.primeReveal(el);
+      const d = el.getAttribute('data-reveal-delay');
+      if(d) el.style.transitionDelay = (parseInt(d,10)) + 'ms';
+      this.revealables.push(el); io.observe(el);
+    });
+
+    // reading reveal split
+    const read = this.root.querySelector('[data-read]');
+    if(read){
+      const text = read.textContent.trim();
+      read.textContent = '';
+      this.readWords = [];
+      text.split(/\s+/).forEach(w=>{
+        const s = document.createElement('span');
+        s.textContent = w + ' ';
+        s.style.color = 'var(--muted)';
+        s.style.transition = 'color .25s ease';
+        read.appendChild(s);
+        this.readWords.push(s);
+      });
+    }
+
+    // cursor + preview + hover
+    this.cursor = this.root.querySelector('[data-cursor]');
+    this.preview = this.root.querySelector('[data-preview]');
+    // preload project build shots so hover-swap is instant
+    this._preload = [];
+    this.root.querySelectorAll('[data-proj]').forEach(row=>{ const s=row.getAttribute('data-img'); if(s){ const im=new Image(); im.src=s; this._preload.push(im); } });
+    // worlds cinematic stage — large featured image swaps per active project
+    this.wImgs = {};
+    this.root.querySelectorAll('[data-wimg]').forEach(im=>{ this.wImgs[im.getAttribute('data-wimg')] = im; });
+    this.setWorld = (name)=>{
+      if(!name || this._world === name || !this.wImgs[name]) return; this._world = name;
+      Object.keys(this.wImgs).forEach(k=>{ const im=this.wImgs[k]; const on=k===name; im.style.opacity = on?'1':'0'; im.style.transform = on?'scale(1)':'scale(1.05)'; });
+      const row = this.root.querySelector('[data-proj][data-name="'+name+'"]');
+      const nm = this.root.querySelector('[data-worlds-name]'); if(nm) nm.textContent = name;
+      const tg = this.root.querySelector('[data-worlds-tag]'); if(tg && row){ const last=row.querySelector(':scope > span:last-child'); if(last) tg.textContent = last.textContent.replace('\u2192','').trim(); }
+    };
+    const projRows = Array.prototype.slice.call(this.root.querySelectorAll('[data-proj]'));
+    if(projRows.length){
+      this._world=null; this.setWorld(projRows[0].getAttribute('data-name'));
+      const wio = new IntersectionObserver((ents)=>{ ents.forEach(e=>{ if(e.isIntersecting) this.setWorld(e.target.getAttribute('data-name')); }); }, { rootMargin:'-46% 0px -46% 0px', threshold:0 });
+      projRows.forEach(r=> wio.observe(r));
+    }
+    this.mouse = { x: window.innerWidth/2, y: window.innerHeight/2 };
+    this.cpos = { x: this.mouse.x, y: this.mouse.y };
+    this.ppos = { x: this.mouse.x, y: this.mouse.y };
+    this.cursorBig = false;
+
+    if(this.fine && !this.reduce){
+      this.root.style.cursor = 'none';
+      window.addEventListener('mousemove', this.onMove = (e)=>{
+        this.mouse.x = e.clientX; this.mouse.y = e.clientY;
+        if(this.cursor) this.cursor.style.opacity = '1';
+      });
+      this.root.querySelectorAll('[data-hover]').forEach(el=>{
+        el.addEventListener('mouseenter', ()=> this.cursorBig = true);
+        el.addEventListener('mouseleave', ()=> this.cursorBig = false);
+      });
+      this.root.querySelectorAll('[data-proj]').forEach(row=>{
+        row.addEventListener('mouseenter', ()=>{
+          row.style.paddingLeft = '24px';
+          this.cursorBig = true;
+          const nm = row.querySelector('[data-proj-name]');
+          if(nm) nm.style.transform = 'translateX(14px)';
+          this.setWorld(row.getAttribute('data-name'));
+        });
+        row.addEventListener('mouseleave', ()=>{
+          row.style.paddingLeft = '0px';
+          this.cursorBig = false;
+          const nm = row.querySelector('[data-proj-name]');
+          if(nm) nm.style.transform = 'translateX(0)';
+        });
+      });
+    }
+
+    // magnetic buttons
+    if(this.fine && !this.reduce){
+      this.root.querySelectorAll('[data-magnetic]').forEach(el=>{
+        el.addEventListener('mousemove', (e)=>{
+          const r = el.getBoundingClientRect();
+          const mx = e.clientX - (r.left + r.width/2);
+          const my = e.clientY - (r.top + r.height/2);
+          el.style.transform = 'translate(' + (mx*0.25) + 'px,' + (my*0.35) + 'px)';
+        });
+        el.addEventListener('mouseleave', ()=>{ el.style.transform = 'translate(0,0)'; });
+      });
+    }
+
+    // animation frame loop (cursor + preview lerp)
+    if(this.fine && !this.reduce){
+      const loop = ()=>{
+        this.cpos.x += (this.mouse.x - this.cpos.x) * 0.22;
+        this.cpos.y += (this.mouse.y - this.cpos.y) * 0.22;
+        const big = this.cursorBig ? 58 : 22;
+        if(this.cursor){
+          this.cursor.style.transform = 'translate(' + this.cpos.x + 'px,' + this.cpos.y + 'px) translate(-50%,-50%)';
+          this.cursor.style.width = big + 'px';
+          this.cursor.style.height = big + 'px';
+        }
+        this.ppos.x += (this.mouse.x - this.ppos.x) * 0.12;
+        this.ppos.y += (this.mouse.y - this.ppos.y) * 0.12;
+        if(this.preview && this.previewOn){
+          this.preview.style.left = this.ppos.x + 'px';
+          this.preview.style.top = this.ppos.y + 'px';
+        }
+        this._loop = requestAnimationFrame(loop);
+      };
+      loop();
+    }
+
+    this.onScroll = ()=>{ if(this._raf) return; this._raf = requestAnimationFrame(()=>{ this._raf = null; this.tick(); }); };
+    window.addEventListener('scroll', this.onScroll, { passive: true });
+    window.addEventListener('resize', this.onScroll);
+    this.tick();
+  }
+  componentWillUnmount(){
+    window.removeEventListener('scroll', this.onScroll);
+    window.removeEventListener('resize', this.onScroll);
+    if(this.onMove) window.removeEventListener('mousemove', this.onMove);
+    if(this._loop) cancelAnimationFrame(this._loop);
+  }
+  tick(){
+    if(!this.root) return;
+    const vh = window.innerHeight;
+    const sy = window.scrollY || window.pageYOffset || 0;
+    // scroll velocity (smoothed) — drives reactive skew so the scroll feels alive
+    const raw = sy - (this._lastSy == null ? sy : this._lastSy);
+    this._lastSy = sy;
+    this.vel = (this.vel || 0) * 0.8 + raw * 0.2;
+    if(!this.reduce){
+      const sk = this.clamp(this.vel * 0.045, -4.2, 4.2);
+      const ty = this.clamp(this.vel * 0.32, -26, 26);
+      this.root.querySelectorAll('[data-vel]').forEach(el=>{
+        const m = parseFloat(el.getAttribute('data-vel')) || 1;
+        el.style.transform = 'skewY(' + (sk * m) + 'deg) translateY(' + (ty * m) + 'px)';
+      });
+    }
+
+    const prog = this.root.querySelector('[data-prog]');
+    if(prog){
+      const max = document.documentElement.scrollHeight - vh;
+      prog.style.transform = 'scaleX(' + this.clamp(max > 0 ? sy/max : 0, 0, 1) + ')';
+    }
+    const nav = this.root.querySelector('[data-nav]');
+    if(nav) nav.style.borderBottomColor = sy > 12 ? 'var(--line)' : 'transparent';
+
+    if(!this.reduce){
+      const hm = this.root.querySelector('[data-hero-mark]');
+      if(hm){
+        const p = this.clamp(sy / vh, 0, 1);
+        hm.style.transform = 'translate3d(0,0,0)';
+        hm.style.opacity = String(1 - p * 0.6);
+      }
+      this.root.querySelectorAll('[data-parallax]').forEach(el=>{
+        const sp = parseFloat(el.getAttribute('data-parallax'));
+        el.style.transform = 'translate3d(0,' + (sy * sp) + 'px,0)';
+      });
+      const pack = this.root.querySelector('[data-pack-img]');
+      if(pack){
+        const r = pack.getBoundingClientRect();
+        const center = (r.top + r.height/2) - vh/2;
+        pack.style.transform = 'translateY(' + (-center * 0.1) + 'px) rotate(' + (center * 0.01) + 'deg)';
+      }
+    }
+
+    if(this.revealables && this.revealables.length){
+      const m = vh * 0.86;
+      for(let i = this.revealables.length - 1; i >= 0; i--){
+        const el = this.revealables[i];
+        if(el._revealed){ this.revealables.splice(i,1); continue; }
+        if(el.getBoundingClientRect().top < m){ this.revealEl(el); this.revealables.splice(i,1); }
+      }
+    }
+
+    // logo build — right piece emerges once when section enters view (handled by IntersectionObserver)
+    // history timeline — horizontal scrub
+    const ht = this.root.querySelector('[data-htimeline]');
+    if(ht){
+      const track = ht.querySelector('[data-htrack]');
+      if(track){
+        const r = ht.getBoundingClientRect();
+        const total = ht.offsetHeight - vh;
+        const p = this.clamp((-r.top)/(total||1),0,1);
+        const dist = Math.max(0, track.scrollWidth - window.innerWidth);
+        track.style.transform = 'translate3d('+(-p*dist)+'px,0,0)';
+      }
+    }
+
+    const wrap = this.root.querySelector('[data-read-wrap]');
+    if(wrap && this.readWords){
+      const r = wrap.getBoundingClientRect();
+      const total = wrap.offsetHeight - vh;
+      const p = this.clamp((-r.top) / (total || 1), 0, 1);
+      const n = Math.floor(p * this.readWords.length * 1.18);
+      for(let i=0;i<this.readWords.length;i++){
+        this.readWords[i].style.color = i < n ? 'var(--fg)' : 'var(--muted)';
+      }
+    }
+  }
+  renderVals(){
+    return {
+      toggleTheme: () => this.toggleTheme(),
+      copyIp: () => this.copyIp()
+    };
+  }
+}
+
+(function(){
+  function boot(){
+    var comp = new Component({ startMode: 'Light', reduceMotion: false });
+    var vals = (typeof comp.renderVals === 'function') ? (comp.renderVals() || {}) : {};
+    if (typeof comp.componentDidMount === 'function') comp.componentDidMount();
+    var nodes = document.querySelectorAll('[data-action]');
+    for (var i = 0; i < nodes.length; i++) {
+      (function(el){
+        var fn = vals[el.getAttribute('data-action')];
+        if (typeof fn === 'function') el.addEventListener('click', fn);
+      })(nodes[i]);
+    }
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+</script>
 </body>
 </html>
-
-
-
